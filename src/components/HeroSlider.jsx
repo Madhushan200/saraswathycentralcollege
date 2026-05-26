@@ -7,7 +7,7 @@ const HeroSlider = () => {
     {
       title: "Saraswathy Central College",
       subtitle: "Guided by our motto “உழை உயர்”, we inspire students to work hard, rise high, and serve society with knowledge and discipline.",
-      image: "/school-building.webp",
+      image: "/school-building.jpg",
       primaryBtn: "Explore Our School",
       primaryLink: "/about",
       secondaryBtn: "Contact Us",

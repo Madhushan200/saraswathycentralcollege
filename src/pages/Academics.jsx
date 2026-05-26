@@ -52,7 +52,7 @@ const Academics = () => {
                 category: "Advanced Level",
                 description: "Builds foundations in corporate administration, finance audit, economics research, and global commerce management.",
                 subjects: "Accounting, Business Studies, Economics, Business Statistics",
-                image: "/school-building.webp"
+                image: "/school-building.jpg"
               },
               {
                 id: 6,
