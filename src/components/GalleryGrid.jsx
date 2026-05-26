@@ -51,7 +51,7 @@ const GalleryGrid = ({ limit = null }) => {
       id: 1,
       title: "Majestic Main Administration Block",
       category: "School Building",
-      image: "/school-building.jpg",
+      image: "/school-building.webp",
       description: "Our historic main building symbolizing over nine decades of academic excellence."
     },
     {

@@ -108,7 +108,7 @@ const Home = () => {
             <div className="absolute inset-0 bg-school-gold rounded-3xl rotate-3 scale-95 opacity-20 -z-10" />
             <div className="absolute -top-4 -left-4 w-12 h-12 bg-school-gold/15 rounded-2xl -z-10" />
             <img 
-              src="/school-building.jpg" 
+              src="/school-building.webp" 
               alt="School Campus" 
               className="w-full aspect-[4/3] object-cover rounded-3xl shadow-xl border border-slate-100" 
             />

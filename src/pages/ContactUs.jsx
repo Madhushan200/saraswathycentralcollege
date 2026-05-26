@@ -36,7 +36,7 @@ const ContactUs = () => {
       {/* Banner */}
       <section className="relative py-20 bg-slate-900 text-white overflow-hidden">
         <div className="absolute inset-0 bg-school-navy-dark/75 z-10" />
-        <img src="/school-building.jpg" alt="Contact Banner" className="absolute inset-0 w-full h-full object-cover" />
+        <img src="/school-building.webp" alt="Contact Banner" className="absolute inset-0 w-full h-full object-cover" />
         <div className="max-w-7xl mx-auto px-6 relative z-20 text-center space-y-4">
           <span className="text-school-gold font-bold text-sm uppercase tracking-widest font-semibold block">
             Connect With Us

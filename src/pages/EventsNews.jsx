@@ -84,7 +84,7 @@ const EventsNews = () => {
     },
     {
       id: 6,
-      image: "/school-building.jpg",
+      image: "/school-building.webp",
       date: "June 05, 2026",
       category: "Community Service",
       title: "Environmental Awareness Program",
