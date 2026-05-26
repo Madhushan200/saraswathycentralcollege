@@ -39,6 +39,24 @@ const HeroSlider = () => {
       primaryLink: "/achievements",
       secondaryBtn: "News & Events",
       secondaryLink: "/events"
+    },
+    {
+      title: "Nurturing Talents & Skills",
+      subtitle: "Empowering every student to develop their unique gifts in art, culture, technology, and sports.",
+      image: "/banner-1.jpg",
+      primaryBtn: "Explore Gallery",
+      primaryLink: "/gallery",
+      secondaryBtn: "Student Activities",
+      secondaryLink: "/student-life"
+    },
+    {
+      title: "Vibrant School Environment",
+      subtitle: "Providing a welcoming and supportive campus to foster academic growth and lifelong friendships.",
+      image: "/banner-2.jpg",
+      primaryBtn: "About Our College",
+      primaryLink: "/about",
+      secondaryBtn: "Contact Admin",
+      secondaryLink: "/contact"
     }
   ];
 
