@@ -3,18 +3,16 @@ import { createClient } from '@supabase/supabase-js';
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || '';
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
 
-// Check if keys are placeholders or not configured
-const hasPlaceholderKeys = !supabaseUrl || !supabaseAnonKey || supabaseUrl.includes('your-project-id') || supabaseAnonKey.includes('your-anon-public-key');
+// Mock mode is completely disabled for production
+export const isMockEnabled = false;
 
-// Enable mock local storage mode if keys are placeholders or if explicitly toggled in localStorage
-export const isMockEnabled = localStorage.getItem('saraswathy_use_mock_db') === 'true' || hasPlaceholderKeys;
-
-if (isMockEnabled) {
-  console.warn(
-    'Running in Local Mock database mode. Data will be read and written to LocalStorage.'
+if (!supabaseUrl || !supabaseAnonKey) {
+  console.error(
+    'Supabase URL or Anon Key is missing! Please configure VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in your environment variables.'
   );
 }
 
-export const supabase = !isMockEnabled && supabaseUrl && supabaseAnonKey ? createClient(supabaseUrl, supabaseAnonKey) : null;
+export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
 
 
