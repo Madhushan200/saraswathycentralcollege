@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Phone, Mail, Award, BookOpen } from 'lucide-react';
-import { supabase, isMockEnabled } from '../supabaseClient';
+import { Menu, X, Phone, Mail } from 'lucide-react';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -32,10 +31,14 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Close mobile menu on route change
+  // Close mobile menu on route change asynchronously to avoid render cascade
   useEffect(() => {
-    setIsOpen(false);
+    const timer = setTimeout(() => {
+      setIsOpen(false);
+    }, 0);
+    return () => clearTimeout(timer);
   }, [location.pathname]);
+
 
   return (
     <header className="fixed top-0 left-0 w-full z-40 transition-all duration-300 font-sans">
