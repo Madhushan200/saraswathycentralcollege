@@ -317,7 +317,7 @@ const AdminDashboard = () => {
       return publicUrl;
     } catch (err) {
       console.error('Error uploading image to storage:', err);
-      throw new Error('Storage bucket error: Make sure you created a public bucket named "uploads" in Supabase.', { cause: err });
+      throw new Error(`Storage Error: ${err.message || 'Make sure you created a public bucket named "uploads" in Supabase.'}`, { cause: err });
     }
   };
 
