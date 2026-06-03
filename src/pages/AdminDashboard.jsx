@@ -228,12 +228,21 @@ const AdminDashboard = () => {
           fetchData();
         }
       } else {
-        const { data: { session } } = await supabase.auth.getSession();
-        if (!session) {
+        try {
+          if (!supabase) {
+            navigate('/admin/login');
+            return;
+          }
+          const { data: { session } } = await supabase.auth.getSession();
+          if (!session) {
+            navigate('/admin/login');
+          } else {
+            setSession(session);
+            fetchData();
+          }
+        } catch (e) {
+          console.error('Session check error:', e);
           navigate('/admin/login');
-        } else {
-          setSession(session);
-          fetchData();
         }
       }
     };
@@ -245,10 +254,17 @@ const AdminDashboard = () => {
       localStorage.removeItem('saraswathy_admin_session');
       navigate('/admin/login');
     } else {
-      await supabase.auth.signOut();
+      if (supabase) {
+        try {
+          await supabase.auth.signOut();
+        } catch (e) {
+          console.error('Sign out error:', e);
+        }
+      }
       navigate('/admin/login');
     }
   };
+
 
   // ----------------------------------------------------
   // Image Upload Helper
