@@ -96,10 +96,7 @@ const Navbar = () => {
           </div>
 
           {/* Center Logo Only (Desktop & Mobile) */}
-          <div className="flex justify-center items-center relative flex-shrink-0 xl:px-6">
-            {/* Left spacer for mobile centering */}
-            <div className="w-10 xl:hidden" />
-
+          <div className="flex justify-center items-center flex-shrink-0 xl:px-6 w-full xl:w-auto">
             <Link to="/" className="group flex justify-center">
               <img 
                 src="https://image.winudf.com/v2/image1/Y29tLm1heHdlbGwuc2FyYXN3YXRoeWNlbnRyYWxjb2xsZWdlX2ljb25fMTU4MzA4NjI0M18wNjI/icon.png?w=184&fakeurl=1" 
@@ -109,19 +106,6 @@ const Navbar = () => {
                 }`}
               />
             </Link>
-
-            {/* Mobile Hamburger on the right */}
-            <div className="flex xl:hidden items-center gap-3 absolute right-0 top-1/2 -translate-y-1/2">
-              <span className="text-school-gold text-xs font-bold tracking-wider font-semibold border border-school-gold/30 px-2 py-0.5 rounded hidden sm:inline-block">
-                உழை உயர்
-              </span>
-              <button 
-                onClick={() => setIsOpen(!isOpen)}
-                className="text-white hover:text-school-gold p-1 transition-colors outline-none cursor-pointer"
-              >
-                {isOpen ? <X className="w-7 h-7" /> : <Menu className="w-7 h-7" />}
-              </button>
-            </div>
           </div>
 
           {/* Right Navigation (Desktop Only) */}
@@ -147,6 +131,19 @@ const Navbar = () => {
             })}
 
 
+          </div>
+
+          {/* Mobile Hamburger on the right */}
+          <div className="flex xl:hidden items-center gap-3 absolute right-0 top-1/2 -translate-y-1/2">
+            <span className="text-school-gold text-xs font-bold tracking-wider font-semibold border border-school-gold/30 px-2 py-0.5 rounded hidden sm:inline-block">
+              உழை உயர்
+            </span>
+            <button 
+              onClick={() => setIsOpen(!isOpen)}
+              className="text-white hover:text-school-gold p-1 transition-colors outline-none cursor-pointer"
+            >
+              {isOpen ? <X className="w-7 h-7" /> : <Menu className="w-7 h-7" />}
+            </button>
           </div>
         </div>
       </nav>
