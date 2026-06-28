@@ -11,6 +11,7 @@ import Achievements from './pages/Achievements';
 import EventsNews from './pages/EventsNews';
 import Gallery from './pages/Gallery';
 import ClubsSocieties from './pages/ClubsSocieties';
+import ClubDetails from './pages/ClubDetails';
 import StudentLife from './pages/StudentLife';
 import ContactUs from './pages/ContactUs';
 
@@ -50,6 +51,7 @@ function App() {
             <Route path="/events" element={<EventsNews />} />
             <Route path="/gallery" element={<Gallery />} />
             <Route path="/clubs" element={<ClubsSocieties />} />
+            <Route path="/clubs/:id" element={<ClubDetails />} />
             <Route path="/student-life" element={<StudentLife />} />
             <Route path="/contact" element={<ContactUs />} />
             

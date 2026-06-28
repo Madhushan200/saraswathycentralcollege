@@ -42,7 +42,54 @@ const SEED_GALLERY = [
 ];
 
 const SEED_CLUBS = [
-  { id: 1, name: "Prefect Board", icon_name: "ShieldCheck", description: "The senior student leadership body responsible for maintaining campus discipline, representing the college at official events, coordinating student assemblies, and mentoring junior classes.", activities: ["Daily general assembly coordination", "Conducting disciplinary rounds", "Guiding junior students and guiding sports meet structures"] },
+  {
+    id: 1,
+    name: "Prefect Board",
+    icon_name: "ShieldCheck",
+    description: "The senior student leadership body responsible for maintaining campus discipline, representing the college at official events, coordinating student assemblies, and mentoring junior classes.",
+    activities: ["Daily general assembly coordination", "Conducting disciplinary rounds", "Guiding junior students and guiding sports meet structures"],
+    logo_url: "/gallery-2.jpg",
+    banner_image: "/school-building.jpg",
+    detailed_description: "The Prefect Board of Saraswathy Central College is the pinnacle of student leadership. Comprising the most exemplary students from grades 11 and 13, the board acts as the bridge between the administration, faculty, and the student body. Prefects are badged in a solemn Investiture Ceremony at the start of each academic year and take an oath of service and integrity. The board plays a vital role in organizing the annual Inter-House Sports Meet, managing daily general assemblies, enforcing the school code of conduct, and coordinating student welfare programs. Through their service, prefects build critical leadership, administrative, and public speaking skills.",
+    head_name: "Master K. Ramanujan",
+    head_title: "Head Prefect (2026)",
+    head_image: "/principal.jpg",
+    head_message: "Serving as the Head Prefect of Saraswathy Central College is a profound honor. Our duty is not just to maintain order, but to inspire our fellow students to achieve greatness. Under our motto 'உழை உயர்' (Rise through Effort), we strive to lead by example, fostering discipline, academic dedication, and a strong sense of community. I am immensely proud of the achievements of my fellow prefects this year and the legacy of service we pass on to the next generation.",
+    head_achievements: [
+      "Led the organization of the 2026 Annual Inter-House Sports Meet, introducing digitized scorekeeping.",
+      "Initiated the 'Prefect Mentorship Program' pairing senior students with grade 6 juniors for peer academic support.",
+      "Represented the college at the National Student Leadership Forum in Colombo, winning the Best Delegation award."
+    ],
+    gallery_years: [
+      { "year": "2026", "images": ["/school-building.jpg", "/sports.jpg"] },
+      { "year": "2025", "images": ["/gallery-1.jpg", "/cultural-event.jpg"] }
+    ],
+    member_lists: [
+      {
+        "year": "2026",
+        "members": [
+          "Master K. Ramanujan (Head Prefect)",
+          "Miss S. Pavithra (Deputy Head Prefect)",
+          "Master T. Arul (Senior Prefect - Games)",
+          "Miss A. Janaki (Senior Prefect - Discipline)",
+          "Master M. Kugan (Junior Prefect Coordinator)",
+          "Miss V. Dharshini (Prefect)",
+          "Master R. Senthan (Prefect)"
+        ]
+      },
+      {
+        "year": "2025",
+        "members": [
+          "Master M. Karthik (Head Prefect)",
+          "Miss K. Shalini (Deputy Head Prefect)",
+          "Master S. Kajendran (Senior Prefect - Games)",
+          "Miss R. Anusha (Senior Prefect - Discipline)",
+          "Master T. Jeyan (Prefect)",
+          "Miss P. Priya (Prefect)"
+        ]
+      }
+    ]
+  },
   { id: 2, name: "Student Parliament", icon_name: "Landmark", description: "Mimicking national governance structures to teach administrative logic, policy debates, and democratic representation. Students raise suggestions and debate campus development matters.", activities: ["Term-based parliamentary sessions", "Debating student requests", "Drafting proposals for principal review"] },
   { id: 3, name: "Tamil Literary Association", icon_name: "PenTool", description: "Safeguarding and celebrating the rich Tamil language, classical literature, poetry composition, and creative speech. Nurtures next-generation writers and orators.", activities: ["Annual Tamil Literary Festival coordination", "Poetry and debate tournaments", "Publishing the annual student journal 'Saraswathy'"] },
   { id: 4, name: "English Literary Association", icon_name: "Languages", description: "Improving conversational eloquence, poetry writing, creative prose, and staging drama. Prepares students for national English Day competitions.", activities: ["Spelling bees and impromptu speech panels", "School play productions", "Writing workshops and reading clubs"] },
@@ -111,7 +158,25 @@ const AdminDashboard = () => {
   // Form Fields
   const [eventForm, setEventForm] = useState({ title: '', category: 'Academic', date: '', description: '', full_content: '', image: '', file: null });
   const [galleryForm, setGalleryForm] = useState({ title: '', category: 'Events', description: '', image: '', file: null });
-  const [clubForm, setClubForm] = useState({ name: '', icon_name: 'ShieldCheck', description: '', activities: '' });
+  const [clubForm, setClubForm] = useState({
+    name: '',
+    icon_name: 'ShieldCheck',
+    description: '',
+    activities: '',
+    logo_url: '',
+    banner_image: '',
+    detailed_description: '',
+    head_name: '',
+    head_title: 'Head Prefect',
+    head_image: '',
+    head_message: '',
+    head_achievements: '',
+    gallery_years: '',
+    member_lists: '',
+    logoFile: null,
+    bannerFile: null,
+    headImageFile: null
+  });
   const [pageForm, setPageForm] = useState({ title: '', slug: '', banner_image: '', content: '', file: null });
   const [principalForm, setPrincipalForm] = useState({ name: '', period: '', description: '', image: '', file: null });
   const [academicForm, setAcademicForm] = useState({ title: '', category: 'Primary', description: '', subjects: '', image: '', file: null });
@@ -348,7 +413,25 @@ const AdminDashboard = () => {
     } else if (type === 'gallery') {
       setGalleryForm({ title: '', category: 'Events', description: '', image: '', file: null });
     } else if (type === 'club') {
-      setClubForm({ name: '', icon_name: 'ShieldCheck', description: '', activities: '' });
+      setClubForm({
+        name: '',
+        icon_name: 'ShieldCheck',
+        description: '',
+        activities: '',
+        logo_url: '',
+        banner_image: '',
+        detailed_description: '',
+        head_name: '',
+        head_title: 'Head Prefect',
+        head_image: '',
+        head_message: '',
+        head_achievements: '',
+        gallery_years: '',
+        member_lists: '',
+        logoFile: null,
+        bannerFile: null,
+        headImageFile: null
+      });
     } else if (type === 'page') {
       setPageForm({ title: '', slug: '', banner_image: '', content: '', file: null });
     } else if (type === 'principal') {
@@ -372,9 +455,48 @@ const AdminDashboard = () => {
       const acts = Array.isArray(item.activities) 
         ? item.activities.join('\n') 
         : typeof item.activities === 'string' 
-          ? JSON.parse(item.activities).join('\n') 
+          ? JSON.parse(item.activities || '[]').join('\n') 
           : '';
-      setClubForm({ name: item.name, icon_name: item.icon_name, description: item.description, activities: acts });
+
+      const hAchs = Array.isArray(item.head_achievements)
+        ? item.head_achievements.join('\n')
+        : typeof item.head_achievements === 'string'
+          ? JSON.parse(item.head_achievements || '[]').join('\n')
+          : '';
+
+      const mListsObj = Array.isArray(item.member_lists)
+        ? item.member_lists
+        : typeof item.member_lists === 'string'
+          ? JSON.parse(item.member_lists || '[]')
+          : [];
+      const mListsStr = Array.isArray(mListsObj) ? mListsObj.map(r => `${r.year}: ${r.members.join(', ')}`).join('\n') : '';
+
+      const galYearsObj = Array.isArray(item.gallery_years)
+        ? item.gallery_years
+        : typeof item.gallery_years === 'string'
+          ? JSON.parse(item.gallery_years || '[]')
+          : [];
+      const galYearsStr = Array.isArray(galYearsObj) ? galYearsObj.map(g => `${g.year}: ${g.images.join(', ')}`).join('\n') : '';
+
+      setClubForm({
+        name: item.name || '',
+        icon_name: item.icon_name || 'ShieldCheck',
+        description: item.description || '',
+        activities: acts,
+        logo_url: item.logo_url || '',
+        banner_image: item.banner_image || '',
+        detailed_description: item.detailed_description || '',
+        head_name: item.head_name || '',
+        head_title: item.head_title || 'Head Prefect',
+        head_image: item.head_image || '',
+        head_message: item.head_message || '',
+        head_achievements: hAchs,
+        gallery_years: galYearsStr,
+        member_lists: mListsStr,
+        logoFile: null,
+        bannerFile: null,
+        headImageFile: null
+      });
     } else if (type === 'page') {
       setPageForm({ ...item, file: null });
     } else if (type === 'principal') {
@@ -471,17 +593,76 @@ const AdminDashboard = () => {
         }
 
       } else if (modalType === 'club') {
+        let logoUrl = clubForm.logo_url;
+        let bannerUrl = clubForm.banner_image;
+        let headImageUrl = clubForm.head_image;
+
+        if (clubForm.logoFile) {
+          logoUrl = await uploadImage(clubForm.logoFile);
+        }
+        if (clubForm.bannerFile) {
+          bannerUrl = await uploadImage(clubForm.bannerFile);
+        }
+        if (clubForm.headImageFile) {
+          headImageUrl = await uploadImage(clubForm.headImageFile);
+        }
+
         const activitiesArr = clubForm.activities
           .split('\n')
           .map(a => a.trim())
           .filter(a => a.length > 0);
+
+        const headAchievementsArr = clubForm.head_achievements
+          .split('\n')
+          .map(a => a.trim())
+          .filter(a => a.length > 0);
+
+        // Parse rosters
+        const memberListsArr = [];
+        if (clubForm.member_lists) {
+          clubForm.member_lists.split('\n').forEach(line => {
+            const parts = line.split(':');
+            if (parts.length >= 2) {
+              const year = parts[0].trim();
+              const members = parts[1].split(',').map(m => m.trim()).filter(m => m.length > 0);
+              if (year && members.length > 0) {
+                memberListsArr.push({ year, members });
+              }
+            }
+          });
+        }
+
+        // Parse gallery
+        const galleryYearsArr = [];
+        if (clubForm.gallery_years) {
+          clubForm.gallery_years.split('\n').forEach(line => {
+            const parts = line.split(':');
+            if (parts.length >= 2) {
+              const year = parts[0].trim();
+              const images = parts[1].split(',').map(img => img.trim()).filter(img => img.length > 0);
+              if (year && images.length > 0) {
+                galleryYearsArr.push({ year, images });
+              }
+            }
+          });
+        }
 
         const payload = {
           id: editingItem ? editingItem.id : Date.now(),
           name: clubForm.name,
           icon_name: clubForm.icon_name,
           description: clubForm.description,
-          activities: activitiesArr
+          activities: activitiesArr,
+          logo_url: logoUrl || null,
+          banner_image: bannerUrl || null,
+          detailed_description: clubForm.detailed_description || null,
+          head_name: clubForm.head_name || null,
+          head_title: clubForm.head_title || 'Head Prefect',
+          head_image: headImageUrl || null,
+          head_message: clubForm.head_message || null,
+          head_achievements: headAchievementsArr,
+          gallery_years: galleryYearsArr,
+          member_lists: memberListsArr
         };
 
         if (isMockEnabled) {
@@ -497,14 +678,22 @@ const AdminDashboard = () => {
         } else {
           const payloadDb = { ...payload };
           delete payloadDb.id;
-          if (editingItem) {
-            const { error } = await supabase.from('clubs').update(payloadDb).eq('id', editingItem.id);
-            if (error) throw error;
-            showToast('Club updated successfully');
-          } else {
-            const { error } = await supabase.from('clubs').insert([payloadDb]);
-            if (error) throw error;
-            showToast('Club added successfully');
+          
+          try {
+            if (editingItem) {
+              const { error } = await supabase.from('clubs').update(payloadDb).eq('id', editingItem.id);
+              if (error) throw error;
+              showToast('Club updated successfully');
+            } else {
+              const { error } = await supabase.from('clubs').insert([payloadDb]);
+              if (error) throw error;
+              showToast('Club added successfully');
+            }
+          } catch (dbErr) {
+            if (dbErr.code === '42703' || dbErr.message?.includes('column')) {
+              throw new Error('Database structure mismatch: columns are missing. Please execute the ALTER TABLE SQL script in schema.sql on your Supabase dashboard to support rich fields.', { cause: dbErr });
+            }
+            throw dbErr;
           }
         }
 
@@ -1383,50 +1572,232 @@ const AdminDashboard = () => {
               {/* Club Editor Fields */}
               {modalType === 'club' && (
                 <>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="space-y-1.5">
-                      <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Club Name</label>
-                      <input 
-                        type="text" 
+                  {/* SECTION 1: BASIC INFORMATION */}
+                  <div className="border-b border-white/10 pb-4 mb-4">
+                    <h3 className="text-sm font-extrabold text-school-gold uppercase tracking-wider mb-3">1. Basic Information</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="space-y-1.5">
+                        <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Club Name</label>
+                        <input 
+                          type="text" 
+                          required
+                          value={clubForm.name}
+                          onChange={(e) => setClubForm(prev => ({ ...prev, name: e.target.value }))}
+                          className="w-full bg-white/5 border border-white/10 focus:border-school-gold rounded-xl py-3 px-4 text-white text-sm outline-none transition-all"
+                        />
+                      </div>
+                      <div className="space-y-1.5">
+                        <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Lucide Symbol Icon</label>
+                        <select 
+                          value={clubForm.icon_name}
+                          onChange={(e) => setClubForm(prev => ({ ...prev, icon_name: e.target.value }))}
+                          className="w-full bg-slate-900 border border-white/10 focus:border-school-gold rounded-xl py-3 px-4 text-white text-sm outline-none transition-all"
+                        >
+                          {AVAILABLE_ICONS.map(ic => <option key={ic} value={ic}>{ic}</option>)}
+                        </select>
+                      </div>
+                    </div>
+
+                    <div className="space-y-1.5 mt-3">
+                      <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Brief Summary</label>
+                      <textarea 
                         required
-                        value={clubForm.name}
-                        onChange={(e) => setClubForm(prev => ({ ...prev, name: e.target.value }))}
+                        value={clubForm.description}
+                        onChange={(e) => setClubForm(prev => ({ ...prev, description: e.target.value }))}
+                        rows="2"
                         className="w-full bg-white/5 border border-white/10 focus:border-school-gold rounded-xl py-3 px-4 text-white text-sm outline-none transition-all"
                       />
                     </div>
-                    <div className="space-y-1.5">
-                      <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Lucide Symbol Icon</label>
-                      <select 
-                        value={clubForm.icon_name}
-                        onChange={(e) => setClubForm(prev => ({ ...prev, icon_name: e.target.value }))}
-                        className="w-full bg-slate-900 border border-white/10 focus:border-school-gold rounded-xl py-3 px-4 text-white text-sm outline-none transition-all"
-                      >
-                        {AVAILABLE_ICONS.map(ic => <option key={ic} value={ic}>{ic}</option>)}
-                      </select>
+
+                    <div className="space-y-1.5 mt-3">
+                      <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Detailed Overview / Description (Markdown/Plaintext)</label>
+                      <textarea 
+                        value={clubForm.detailed_description}
+                        placeholder="Detailed history, mission statement, etc..."
+                        onChange={(e) => setClubForm(prev => ({ ...prev, detailed_description: e.target.value }))}
+                        rows="4"
+                        className="w-full bg-white/5 border border-white/10 focus:border-school-gold rounded-xl py-3 px-4 text-white text-sm outline-none transition-all"
+                      />
+                    </div>
+
+                    <div className="space-y-1.5 mt-3">
+                      <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Key Activities (Write each activity on a new line)</label>
+                      <textarea 
+                        required
+                        placeholder="e.g.&#10;Daily assembly coordination&#10;Conducting discipline audits&#10;Mentoring junior leaders"
+                        value={clubForm.activities}
+                        onChange={(e) => setClubForm(prev => ({ ...prev, activities: e.target.value }))}
+                        rows="3"
+                        className="w-full bg-white/5 border border-white/10 focus:border-school-gold rounded-xl py-3 px-4 text-white text-sm outline-none transition-all"
+                      />
                     </div>
                   </div>
 
-                  <div className="space-y-1.5">
-                    <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Club Description</label>
-                    <textarea 
-                      required
-                      value={clubForm.description}
-                      onChange={(e) => setClubForm(prev => ({ ...prev, description: e.target.value }))}
-                      rows="4"
-                      className="w-full bg-white/5 border border-white/10 focus:border-school-gold rounded-xl py-3 px-4 text-white text-sm outline-none transition-all"
-                    />
+                  {/* SECTION 2: CLUB MEDIA */}
+                  <div className="border-b border-white/10 pb-4 mb-4">
+                    <h3 className="text-sm font-extrabold text-school-gold uppercase tracking-wider mb-3">2. Media & Branding</h3>
+                    
+                    {/* Logo Image */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="space-y-1.5">
+                        <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Upload Logo File</label>
+                        <label className="flex items-center gap-2 px-4 py-3 bg-white/5 border border-white/10 hover:border-school-gold text-slate-300 rounded-xl cursor-pointer text-xs font-bold w-full transition-all">
+                          <Upload className="w-4 h-4 text-school-gold" />
+                          <span className="truncate">{clubForm.logoFile ? clubForm.logoFile.name : 'Select logo...'}</span>
+                          <input 
+                            type="file" 
+                            accept="image/*"
+                            onChange={(e) => setClubForm(prev => ({ ...prev, logoFile: e.target.files[0] }))}
+                            className="hidden"
+                          />
+                        </label>
+                      </div>
+                      <div className="space-y-1.5">
+                        <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Or Logo URL Path</label>
+                        <input 
+                          type="text" 
+                          placeholder="e.g. /gallery-2.jpg"
+                          value={clubForm.logo_url}
+                          onChange={(e) => setClubForm(prev => ({ ...prev, logo_url: e.target.value }))}
+                          className="w-full bg-white/5 border border-white/10 focus:border-school-gold rounded-xl py-3 px-4 text-white text-sm outline-none transition-all"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Banner Image */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
+                      <div className="space-y-1.5">
+                        <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Upload Banner File</label>
+                        <label className="flex items-center gap-2 px-4 py-3 bg-white/5 border border-white/10 hover:border-school-gold text-slate-300 rounded-xl cursor-pointer text-xs font-bold w-full transition-all">
+                          <Upload className="w-4 h-4 text-school-gold" />
+                          <span className="truncate">{clubForm.bannerFile ? clubForm.bannerFile.name : 'Select banner...'}</span>
+                          <input 
+                            type="file" 
+                            accept="image/*"
+                            onChange={(e) => setClubForm(prev => ({ ...prev, bannerFile: e.target.files[0] }))}
+                            className="hidden"
+                          />
+                        </label>
+                      </div>
+                      <div className="space-y-1.5">
+                        <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Or Banner URL Path</label>
+                        <input 
+                          type="text" 
+                          placeholder="e.g. /school-building.jpg"
+                          value={clubForm.banner_image}
+                          onChange={(e) => setClubForm(prev => ({ ...prev, banner_image: e.target.value }))}
+                          className="w-full bg-white/5 border border-white/10 focus:border-school-gold rounded-xl py-3 px-4 text-white text-sm outline-none transition-all"
+                        />
+                      </div>
+                    </div>
                   </div>
 
-                  <div className="space-y-1.5">
-                    <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Key Activities (Write each activity on a new line)</label>
-                    <textarea 
-                      required
-                      placeholder="e.g.&#10;Daily assembly coordination&#10;Conducting discipline audits&#10;Mentoring junior leaders"
-                      value={clubForm.activities}
-                      onChange={(e) => setClubForm(prev => ({ ...prev, activities: e.target.value }))}
-                      rows="4"
-                      className="w-full bg-white/5 border border-white/10 focus:border-school-gold rounded-xl py-3 px-4 text-white text-sm outline-none transition-all"
-                    />
+                  {/* SECTION 3: LEADERSHIP PROFILE */}
+                  <div className="border-b border-white/10 pb-4 mb-4">
+                    <h3 className="text-sm font-extrabold text-school-gold uppercase tracking-wider mb-3">3. Leadership Profile (President / Head Prefect)</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="space-y-1.5">
+                        <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Leader Name</label>
+                        <input 
+                          type="text" 
+                          placeholder="e.g. Master K. Ramanujan"
+                          value={clubForm.head_name}
+                          onChange={(e) => setClubForm(prev => ({ ...prev, head_name: e.target.value }))}
+                          className="w-full bg-white/5 border border-white/10 focus:border-school-gold rounded-xl py-3 px-4 text-white text-sm outline-none transition-all"
+                        />
+                      </div>
+                      <div className="space-y-1.5">
+                        <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Leader Title / Role</label>
+                        <input 
+                          type="text" 
+                          placeholder="e.g. Head Prefect (2026)"
+                          value={clubForm.head_title}
+                          onChange={(e) => setClubForm(prev => ({ ...prev, head_title: e.target.value }))}
+                          className="w-full bg-white/5 border border-white/10 focus:border-school-gold rounded-xl py-3 px-4 text-white text-sm outline-none transition-all"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
+                      <div className="space-y-1.5">
+                        <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Upload Leader Photo</label>
+                        <label className="flex items-center gap-2 px-4 py-3 bg-white/5 border border-white/10 hover:border-school-gold text-slate-300 rounded-xl cursor-pointer text-xs font-bold w-full transition-all">
+                          <Upload className="w-4 h-4 text-school-gold" />
+                          <span className="truncate">{clubForm.headImageFile ? clubForm.headImageFile.name : 'Select photo...'}</span>
+                          <input 
+                            type="file" 
+                            accept="image/*"
+                            onChange={(e) => setClubForm(prev => ({ ...prev, headImageFile: e.target.files[0] }))}
+                            className="hidden"
+                          />
+                        </label>
+                      </div>
+                      <div className="space-y-1.5">
+                        <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Or Photo URL Path</label>
+                        <input 
+                          type="text" 
+                          placeholder="e.g. /principal.jpg"
+                          value={clubForm.head_image}
+                          onChange={(e) => setClubForm(prev => ({ ...prev, head_image: e.target.value }))}
+                          className="w-full bg-white/5 border border-white/10 focus:border-school-gold rounded-xl py-3 px-4 text-white text-sm outline-none transition-all"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="space-y-1.5 mt-3">
+                      <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Leadership Message / Address</label>
+                      <textarea 
+                        value={clubForm.head_message}
+                        placeholder="Write message to students..."
+                        onChange={(e) => setClubForm(prev => ({ ...prev, head_message: e.target.value }))}
+                        rows="3"
+                        className="w-full bg-white/5 border border-white/10 focus:border-school-gold rounded-xl py-3 px-4 text-white text-sm outline-none transition-all"
+                      />
+                    </div>
+
+                    <div className="space-y-1.5 mt-3">
+                      <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Leader Achievements (One per line)</label>
+                      <textarea 
+                        value={clubForm.head_achievements}
+                        placeholder="e.g.&#10;Led coordination of sports meet&#10;Awarded Provincial leadership honors"
+                        onChange={(e) => setClubForm(prev => ({ ...prev, head_achievements: e.target.value }))}
+                        rows="3"
+                        className="w-full bg-white/5 border border-white/10 focus:border-school-gold rounded-xl py-3 px-4 text-white text-sm outline-none transition-all"
+                      />
+                    </div>
+                  </div>
+
+                  {/* SECTION 4: ROSTERS AND HISTORICAL GALLERY */}
+                  <div>
+                    <h3 className="text-sm font-extrabold text-school-gold uppercase tracking-wider mb-3">4. Rosters & Galleries</h3>
+                    
+                    <div className="space-y-1.5">
+                      <label className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center justify-between">
+                        <span>Year-Wise Member Rosters</span>
+                        <span className="text-[10px] text-slate-500 font-medium normal-case">Format: Year: Name1, Name2</span>
+                      </label>
+                      <textarea 
+                        value={clubForm.member_lists}
+                        placeholder="e.g.&#10;2026: Master K. Ramanujan (Head Prefect), Miss S. Pavithra&#10;2025: Master M. Karthik (Head Prefect), Miss K. Shalini"
+                        onChange={(e) => setClubForm(prev => ({ ...prev, member_lists: e.target.value }))}
+                        rows="3"
+                        className="w-full bg-white/5 border border-white/10 focus:border-school-gold rounded-xl py-3 px-4 text-white text-sm outline-none transition-all"
+                      />
+                    </div>
+
+                    <div className="space-y-1.5 mt-3">
+                      <label className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center justify-between">
+                        <span>Year-Wise Photo Gallery</span>
+                        <span className="text-[10px] text-slate-500 font-medium normal-case">Format: Year: URL1, URL2</span>
+                      </label>
+                      <textarea 
+                        value={clubForm.gallery_years}
+                        placeholder="e.g.&#10;2026: /school-building.jpg, /sports.jpg&#10;2025: /gallery-1.jpg, /cultural-event.jpg"
+                        onChange={(e) => setClubForm(prev => ({ ...prev, gallery_years: e.target.value }))}
+                        rows="3"
+                        className="w-full bg-white/5 border border-white/10 focus:border-school-gold rounded-xl py-3 px-4 text-white text-sm outline-none transition-all"
+                      />
+                    </div>
                   </div>
                 </>
               )}
