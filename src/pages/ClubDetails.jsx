@@ -4,7 +4,7 @@ import { supabase, isMockEnabled } from '../supabaseClient';
 import { 
   ArrowLeft, ShieldCheck, Calendar, Users, Award, 
   Image as ImageIcon, BookOpen, Clock, Heart, ChevronRight,
-  User, CheckCircle, Info
+  User, CheckCircle, Info, X
 } from 'lucide-react';
 import ClubIcon from '../components/ClubIcon';
 
@@ -16,6 +16,7 @@ const ClubDetails = () => {
   const [activeRosterYear, setActiveRosterYear] = useState('');
   const [activeGalleryYear, setActiveGalleryYear] = useState('');
   const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedLeader, setSelectedLeader] = useState(null);
 
   // Fallback clubs data (matches ClubsSocieties fallback list + rich Board of Prefects data)
   const fallbackClubs = [
@@ -390,6 +391,81 @@ const ClubDetails = () => {
               )}
             </div>
 
+            {/* Roll of Honor: Year-Wise Leaders */}
+            {(club.leadership_history && club.leadership_history.length > 0) || club.head_name ? (
+              <div className="bg-white border border-slate-100 rounded-3xl p-6 md:p-8 shadow-sm text-left">
+                <h2 className="text-2xl font-black text-school-navy mb-2 border-b border-slate-100 pb-3 flex items-center gap-2">
+                  <Award className="w-6 h-6 text-school-gold" /> Roll of Honor - Leadership
+                </h2>
+                <p className="text-slate-500 text-xs md:text-sm mb-6">Click on any leader to view their address and served contributions</p>
+                
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-6">
+                  {club.leadership_history && club.leadership_history.length > 0 ? (
+                    club.leadership_history.map((leader, index) => (
+                      <div 
+                        key={index}
+                        onClick={() => setSelectedLeader(leader)}
+                        className="bg-slate-50 hover:bg-slate-100/80 border border-slate-100 hover:border-school-gold/30 rounded-2xl p-4 flex flex-col items-center justify-between text-center transition-all duration-300 shadow-2xs hover:shadow-md cursor-pointer hover:-translate-y-1 group"
+                      >
+                        <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-full overflow-hidden border-2 border-school-gold/40 group-hover:border-school-gold shadow-sm flex-shrink-0">
+                          <img 
+                            src={leader.image || "/principal.jpg"} 
+                            alt={leader.name} 
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                        <span className="text-[10px] font-black text-school-gold bg-school-navy px-2.5 py-1 rounded-full uppercase tracking-wider mt-3 shadow-3xs">
+                          Term: {leader.year}
+                        </span>
+                        <h4 className="text-sm font-bold text-school-navy mt-2 leading-tight w-full truncate">
+                          {leader.name}
+                        </h4>
+                        <p className="text-[10px] text-slate-500 font-semibold uppercase tracking-wider mt-1 w-full truncate">
+                          {leader.title || 'Leader'}
+                        </p>
+                        <span className="text-[10px] font-extrabold text-school-gold hover:underline mt-3 flex items-center gap-0.5 opacity-70 group-hover:opacity-100 transition-opacity">
+                          View Service <ChevronRight className="w-3 h-3 mt-0.5" />
+                        </span>
+                      </div>
+                    ))
+                  ) : (
+                    /* Fallback to legacy single leader */
+                    <div 
+                      onClick={() => setSelectedLeader({
+                        year: 'Current',
+                        name: club.head_name,
+                        title: club.head_title || 'Leader',
+                        image: club.head_image,
+                        message: club.head_message,
+                        achievements: club.head_achievements
+                      })}
+                      className="bg-slate-50 hover:bg-slate-100/80 border border-slate-100 hover:border-school-gold/30 rounded-2xl p-4 flex flex-col items-center justify-between text-center transition-all duration-300 shadow-2xs hover:shadow-md cursor-pointer hover:-translate-y-1 group"
+                    >
+                      <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-full overflow-hidden border-2 border-school-gold/40 group-hover:border-school-gold shadow-sm flex-shrink-0">
+                        <img 
+                          src={club.head_image || "/principal.jpg"} 
+                          alt={club.head_name} 
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                      <span className="text-[10px] font-black text-school-gold bg-school-navy px-2.5 py-1 rounded-full uppercase tracking-wider mt-3 shadow-3xs">
+                        Current Term
+                      </span>
+                      <h4 className="text-sm font-bold text-school-navy mt-2 leading-tight w-full truncate">
+                        {club.head_name}
+                      </h4>
+                      <p className="text-[10px] text-slate-500 font-semibold uppercase tracking-wider mt-1 w-full truncate">
+                        {club.head_title || 'Leader'}
+                      </p>
+                      <span className="text-[10px] font-extrabold text-school-gold hover:underline mt-3 flex items-center gap-0.5 opacity-70 group-hover:opacity-100 transition-opacity">
+                        View Service <ChevronRight className="w-3 h-3 mt-0.5" />
+                      </span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            ) : null}
+
             {/* Year-wise Roster (Prefect/Member Lists) */}
             {club.member_lists && club.member_lists.length > 0 ? (
               <div className="bg-white border border-slate-100 rounded-3xl p-6 md:p-8 shadow-sm text-left">
@@ -449,59 +525,8 @@ const ClubDetails = () => {
             )}
           </div>
 
-          {/* Right Column: Leadership Card & Year-wise Gallery */}
+          {/* Right Column: Year-wise Gallery */}
           <div className="lg:col-span-5 space-y-8 md:space-y-12">
-            
-            {/* Leadership Message Card */}
-            {resolvedLeader ? (
-              <div className="bg-white border border-slate-100 rounded-3xl p-6 md:p-8 shadow-sm text-left relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-24 h-24 bg-school-gold/10 rounded-bl-full flex items-center justify-center flex-shrink-0 -z-10" />
-                
-                <h3 className="text-lg font-bold text-school-gold uppercase tracking-widest mb-6 flex items-center gap-2">
-                  <User className="w-5 h-5" /> Leadership Message ({activeRosterYear})
-                </h3>
-
-                <div className="flex flex-col sm:flex-row items-center sm:items-start gap-5 mb-6">
-                  {/* Leader Image */}
-                  <div className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-2xl overflow-hidden border-2 border-school-gold flex-shrink-0 shadow-md">
-                    <img 
-                      src={resolvedLeader.image || "/principal.jpg"} 
-                      alt={resolvedLeader.name} 
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <div className="space-y-1 text-center sm:text-left">
-                    <h4 className="text-xl font-bold text-school-navy">{resolvedLeader.name}</h4>
-                    <p className="text-xs font-bold text-school-gold uppercase tracking-wider">{resolvedLeader.title || 'Leader'}</p>
-                    <p className="text-[11px] text-slate-500 font-medium">Saraswathy Central College</p>
-                  </div>
-                </div>
-
-                {/* Message Speech bubble */}
-                {resolvedLeader.message && (
-                  <blockquote className="bg-slate-50 border-l-4 border-school-gold p-4 rounded-r-xl italic font-serif text-slate-700 text-sm md:text-base mb-6 leading-relaxed relative">
-                    "{resolvedLeader.message}"
-                  </blockquote>
-                )}
-
-                {/* Leader Achievements */}
-                {resolvedLeader.achievements && resolvedLeader.achievements.length > 0 && (
-                  <div className="space-y-3">
-                    <h5 className="text-xs font-black uppercase text-school-navy tracking-wider border-b border-slate-100 pb-1.5">
-                      Key Contributions & Achievements
-                    </h5>
-                    <ul className="space-y-2">
-                      {resolvedLeader.achievements.map((ach, idx) => (
-                        <li key={idx} className="flex items-start gap-2 text-xs md:text-sm text-slate-600">
-                          <ChevronRight className="w-4 h-4 text-school-gold flex-shrink-0 mt-0.5" />
-                          <span>{ach}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-              </div>
-            ) : null}
 
             {/* Gallery Year-wise */}
             {club.gallery_years && club.gallery_years.length > 0 ? (
@@ -576,6 +601,94 @@ const ClubDetails = () => {
             >
               &times;
             </button>
+          </div>
+        </div>
+      )}
+
+      {/* Leadership Details Modal */}
+      {selectedLeader && (
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs transition-opacity duration-350 cursor-pointer"
+          onClick={() => setSelectedLeader(null)}
+        >
+          <div 
+            className="bg-white rounded-3xl max-w-2xl w-full border border-slate-100 overflow-hidden shadow-2xl relative cursor-default text-left flex flex-col transition-all duration-300 scale-100"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Header/Banner */}
+            <div className="relative h-32 bg-school-navy p-6 flex items-end">
+              <div className="absolute inset-0 bg-gradient-to-t from-school-navy via-school-navy/80 to-transparent z-10" />
+              <img 
+                src={club.banner_image || "/school-building.jpg"} 
+                alt="Banner" 
+                className="absolute inset-0 w-full h-full object-cover opacity-25"
+              />
+              <button 
+                onClick={() => setSelectedLeader(null)}
+                className="absolute top-4 right-4 z-20 w-8 h-8 rounded-full bg-black/40 hover:bg-black/60 text-white flex items-center justify-center transition-colors cursor-pointer"
+              >
+                <X className="w-4.5 h-4.5" />
+              </button>
+
+              <div className="relative z-20 text-left">
+                <span className="text-[10px] font-black text-school-gold bg-white/10 px-2.5 py-1 rounded-full uppercase tracking-widest">
+                  Term: {selectedLeader.year}
+                </span>
+                <h3 className="text-xl md:text-2xl font-black text-white mt-2 leading-tight">
+                  {selectedLeader.name}
+                </h3>
+                <p className="text-xs font-bold text-school-gold/90 uppercase tracking-wider mt-0.5">
+                  {selectedLeader.title || 'Leader'}
+                </p>
+              </div>
+            </div>
+
+            {/* Modal Body */}
+            <div className="p-6 md:p-8 space-y-6 max-h-[70vh] overflow-y-auto custom-scrollbar text-left">
+              <div className="flex flex-col sm:flex-row gap-6 items-center sm:items-start">
+                {/* Photo */}
+                <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl border-4 border-school-gold overflow-hidden flex-shrink-0 shadow-md">
+                  <img 
+                    src={selectedLeader.image || "/principal.jpg"} 
+                    alt={selectedLeader.name} 
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+
+                {/* Message */}
+                <div className="flex-grow space-y-4 w-full">
+                  {selectedLeader.message ? (
+                    <div className="space-y-2">
+                      <h4 className="text-[10px] font-black uppercase text-school-navy tracking-wider border-b border-slate-100 pb-1 flex items-center gap-1.5">
+                        <User className="w-3.5 h-3.5 text-school-gold" /> Leader Message
+                      </h4>
+                      <blockquote className="bg-slate-50 border-l-4 border-school-gold p-4 rounded-r-xl italic font-serif text-slate-700 text-xs md:text-sm leading-relaxed">
+                        "{selectedLeader.message}"
+                      </blockquote>
+                    </div>
+                  ) : (
+                    <p className="text-xs text-slate-400 italic">No leadership address submitted for this term.</p>
+                  )}
+                </div>
+              </div>
+
+              {/* Achievements / Services */}
+              {selectedLeader.achievements && selectedLeader.achievements.length > 0 && (
+                <div className="space-y-3 pt-2 border-t border-slate-100">
+                  <h4 className="text-[10px] font-black uppercase text-school-navy tracking-wider border-b border-slate-100 pb-1 flex items-center gap-1.5">
+                    <Award className="w-3.5 h-3.5 text-school-gold" /> Served services & achievements
+                  </h4>
+                  <ul className="space-y-2">
+                    {selectedLeader.achievements.map((ach, idx) => (
+                      <li key={idx} className="flex items-start gap-2 text-xs text-slate-600">
+                        <CheckCircle className="w-4 h-4 text-school-gold flex-shrink-0 mt-0.5" />
+                        <span>{ach}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       )}
