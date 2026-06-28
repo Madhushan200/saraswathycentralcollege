@@ -60,6 +60,31 @@ const SEED_CLUBS = [
       "Initiated the 'Prefect Mentorship Program' pairing senior students with grade 6 juniors for peer academic support.",
       "Represented the college at the National Student Leadership Forum in Colombo, winning the Best Delegation award."
     ],
+    leadership_history: [
+      {
+        "year": "2026",
+        "name": "Master K. Ramanujan",
+        "title": "Head Prefect",
+        "image": "/principal.jpg",
+        "message": "Serving as the Head Prefect of Saraswathy Central College is a profound honor. Our duty is not just to maintain order, but to inspire our fellow students to achieve greatness. Under our motto 'உழை உயர்' (Rise through Effort), we strive to lead by example, fostering discipline, academic dedication, and a strong sense of community. I am immensely proud of the achievements of my fellow prefects this year and the legacy of service we pass on to the next generation.",
+        "achievements": [
+          "Led the organization of the 2026 Annual Inter-House Sports Meet, introducing digitized scorekeeping.",
+          "Initiated the 'Prefect Mentorship Program' pairing senior students with grade 6 juniors for peer academic support.",
+          "Represented the college at the National Student Leadership Forum in Colombo, winning the Best Delegation award."
+        ]
+      },
+      {
+        "year": "2025",
+        "name": "Master M. Karthik",
+        "title": "Head Prefect",
+        "image": "/principal.jpg",
+        "message": "It was a privilege to lead the board during our 90th anniversary year. We focused on community outreach and strengthening school discipline through positive reinforcement, building a legacy of service.",
+        "achievements": [
+          "Organized the first provincial school leadership symposium with 15 participating schools.",
+          "Initiated the campus plastic-free green pledge in collaboration with the Environmental Club."
+        ]
+      }
+    ],
     gallery_years: [
       { "year": "2026", "images": ["/school-building.jpg", "/sports.jpg"] },
       { "year": "2025", "images": ["/gallery-1.jpg", "/cultural-event.jpg"] }
@@ -133,6 +158,58 @@ const SEED_ACHIEVEMENTS = [
   { id: 6, title: "Zonal School Badminton Singles Silver", level: "Zonal", category: "Sports", description: "Silver medal in junior singles category at the zonal schools tournament.", image: "/sports.jpg", year: "2026" }
 ];
 
+// To stringify leadership_history:
+const stringifyLeadershipHistory = (historyList) => {
+  if (!Array.isArray(historyList)) return '';
+  return historyList.map(item => {
+    const achs = Array.isArray(item.achievements) ? item.achievements.join('; ') : '';
+    return `${item.year}:\nName: ${item.name || ''}\nTitle: ${item.title || ''}\nImage: ${item.image || ''}\nMessage: ${item.message || ''}\nAchievements: ${achs}`;
+  }).join('\n\n');
+};
+
+// To parse leadership_history back:
+const parseLeadershipHistory = (str) => {
+  const history = [];
+  if (!str) return history;
+  const blocks = str.split(/\n\s*\n/);
+  blocks.forEach(block => {
+    const lines = block.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+    if (lines.length === 0) return;
+    
+    const yearLine = lines[0];
+    if (!yearLine.endsWith(':')) return;
+    const year = yearLine.slice(0, -1).trim();
+    if (!year) return;
+
+    let name = '';
+    let title = '';
+    let image = '';
+    let message = '';
+    let achievements = [];
+
+    for (let i = 1; i < lines.length; i++) {
+      const line = lines[i];
+      const colonIdx = line.indexOf(':');
+      if (colonIdx === -1) continue;
+      const key = line.substring(0, colonIdx).trim().toLowerCase();
+      const val = line.substring(colonIdx + 1).trim();
+
+      if (key === 'name') name = val;
+      else if (key === 'title') title = val;
+      else if (key === 'image') image = val;
+      else if (key === 'message') message = val;
+      else if (key === 'achievements') {
+        achievements = val.split(';').map(a => a.trim()).filter(a => a.length > 0);
+      }
+    }
+
+    if (name) {
+      history.push({ year, name, title, image, message, achievements });
+    }
+  });
+  return history;
+};
+
 const AdminDashboard = () => {
   const navigate = useNavigate();
   const [session, setSession] = useState(null);
@@ -173,6 +250,7 @@ const AdminDashboard = () => {
     head_achievements: '',
     gallery_years: '',
     member_lists: '',
+    leadership_history: '',
     logoFile: null,
     bannerFile: null,
     headImageFile: null
@@ -428,6 +506,7 @@ const AdminDashboard = () => {
         head_achievements: '',
         gallery_years: '',
         member_lists: '',
+        leadership_history: '',
         logoFile: null,
         bannerFile: null,
         headImageFile: null
@@ -493,6 +572,7 @@ const AdminDashboard = () => {
         head_achievements: hAchs,
         gallery_years: galYearsStr,
         member_lists: mListsStr,
+        leadership_history: stringifyLeadershipHistory(item.leadership_history),
         logoFile: null,
         bannerFile: null,
         headImageFile: null
@@ -647,6 +727,9 @@ const AdminDashboard = () => {
           });
         }
 
+        const leadershipHistoryArr = parseLeadershipHistory(clubForm.leadership_history);
+        const latestLeader = leadershipHistoryArr.find(l => l.year === '2026') || leadershipHistoryArr[0] || null;
+
         const payload = {
           id: editingItem ? editingItem.id : Date.now(),
           name: clubForm.name,
@@ -656,13 +739,14 @@ const AdminDashboard = () => {
           logo_url: logoUrl || null,
           banner_image: bannerUrl || null,
           detailed_description: clubForm.detailed_description || null,
-          head_name: clubForm.head_name || null,
-          head_title: clubForm.head_title || 'Head Prefect',
-          head_image: headImageUrl || null,
-          head_message: clubForm.head_message || null,
-          head_achievements: headAchievementsArr,
+          head_name: latestLeader ? latestLeader.name : null,
+          head_title: latestLeader ? latestLeader.title : 'Head Prefect',
+          head_image: latestLeader ? latestLeader.image : null,
+          head_message: latestLeader ? latestLeader.message : null,
+          head_achievements: latestLeader ? latestLeader.achievements : [],
           gallery_years: galleryYearsArr,
-          member_lists: memberListsArr
+          member_lists: memberListsArr,
+          leadership_history: leadershipHistoryArr
         };
 
         if (isMockEnabled) {
@@ -1692,77 +1776,20 @@ const AdminDashboard = () => {
                     </div>
                   </div>
 
-                  {/* SECTION 3: LEADERSHIP PROFILE */}
+                  {/* SECTION 3: LEADERSHIP HISTORY */}
                   <div className="border-b border-white/10 pb-4 mb-4">
-                    <h3 className="text-sm font-extrabold text-school-gold uppercase tracking-wider mb-3">3. Leadership Profile (President / Head Prefect)</h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="space-y-1.5">
-                        <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Leader Name</label>
-                        <input 
-                          type="text" 
-                          placeholder="e.g. Master K. Ramanujan"
-                          value={clubForm.head_name}
-                          onChange={(e) => setClubForm(prev => ({ ...prev, head_name: e.target.value }))}
-                          className="w-full bg-white/5 border border-white/10 focus:border-school-gold rounded-xl py-3 px-4 text-white text-sm outline-none transition-all"
-                        />
-                      </div>
-                      <div className="space-y-1.5">
-                        <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Leader Title / Role</label>
-                        <input 
-                          type="text" 
-                          placeholder="e.g. Head Prefect (2026)"
-                          value={clubForm.head_title}
-                          onChange={(e) => setClubForm(prev => ({ ...prev, head_title: e.target.value }))}
-                          className="w-full bg-white/5 border border-white/10 focus:border-school-gold rounded-xl py-3 px-4 text-white text-sm outline-none transition-all"
-                        />
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
-                      <div className="space-y-1.5">
-                        <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Upload Leader Photo</label>
-                        <label className="flex items-center gap-2 px-4 py-3 bg-white/5 border border-white/10 hover:border-school-gold text-slate-300 rounded-xl cursor-pointer text-xs font-bold w-full transition-all">
-                          <Upload className="w-4 h-4 text-school-gold" />
-                          <span className="truncate">{clubForm.headImageFile ? clubForm.headImageFile.name : 'Select photo...'}</span>
-                          <input 
-                            type="file" 
-                            accept="image/*"
-                            onChange={(e) => setClubForm(prev => ({ ...prev, headImageFile: e.target.files[0] }))}
-                            className="hidden"
-                          />
-                        </label>
-                      </div>
-                      <div className="space-y-1.5">
-                        <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Or Photo URL Path</label>
-                        <input 
-                          type="text" 
-                          placeholder="e.g. /principal.jpg"
-                          value={clubForm.head_image}
-                          onChange={(e) => setClubForm(prev => ({ ...prev, head_image: e.target.value }))}
-                          className="w-full bg-white/5 border border-white/10 focus:border-school-gold rounded-xl py-3 px-4 text-white text-sm outline-none transition-all"
-                        />
-                      </div>
-                    </div>
-
-                    <div className="space-y-1.5 mt-3">
-                      <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Leadership Message / Address</label>
+                    <h3 className="text-sm font-extrabold text-school-gold uppercase tracking-wider mb-3">3. Year-Wise Leadership History</h3>
+                    <div className="space-y-1.5">
+                      <label className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center justify-between">
+                        <span>Leadership History (Separate terms with blank lines)</span>
+                        <span className="text-[10px] text-slate-500 font-medium normal-case">Format: Year followed by details</span>
+                      </label>
                       <textarea 
-                        value={clubForm.head_message}
-                        placeholder="Write message to students..."
-                        onChange={(e) => setClubForm(prev => ({ ...prev, head_message: e.target.value }))}
-                        rows="3"
-                        className="w-full bg-white/5 border border-white/10 focus:border-school-gold rounded-xl py-3 px-4 text-white text-sm outline-none transition-all"
-                      />
-                    </div>
-
-                    <div className="space-y-1.5 mt-3">
-                      <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Leader Achievements (One per line)</label>
-                      <textarea 
-                        value={clubForm.head_achievements}
-                        placeholder="e.g.&#10;Led coordination of sports meet&#10;Awarded Provincial leadership honors"
-                        onChange={(e) => setClubForm(prev => ({ ...prev, head_achievements: e.target.value }))}
-                        rows="3"
-                        className="w-full bg-white/5 border border-white/10 focus:border-school-gold rounded-xl py-3 px-4 text-white text-sm outline-none transition-all"
+                        value={clubForm.leadership_history}
+                        placeholder="e.g.&#10;2026:&#10;Name: Master K. Ramanujan&#10;Title: Head Prefect&#10;Image: /principal.jpg&#10;Message: Serving as the Head Prefect is an honor...&#10;Achievements: Led organization of sports meet; Initiated mentorship program&#10;&#10;2025:&#10;Name: Master M. Karthik&#10;Title: Head Prefect&#10;Image: /principal.jpg&#10;Message: It was a privilege to serve..."
+                        onChange={(e) => setClubForm(prev => ({ ...prev, leadership_history: e.target.value }))}
+                        rows="8"
+                        className="w-full bg-white/5 border border-white/10 focus:border-school-gold rounded-xl py-3 px-4 text-white text-sm outline-none font-mono transition-all"
                       />
                     </div>
                   </div>

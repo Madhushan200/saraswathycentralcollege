@@ -37,6 +37,31 @@ const ClubDetails = () => {
         "Initiated the 'Prefect Mentorship Program' pairing senior students with grade 6 juniors for peer academic support.",
         "Represented the college at the National Student Leadership Forum in Colombo, winning the Best Delegation award."
       ],
+      leadership_history: [
+        {
+          "year": "2026",
+          "name": "Master K. Ramanujan",
+          "title": "Head Prefect",
+          "image": "/principal.jpg",
+          "message": "Serving as the Head Prefect of Saraswathy Central College is a profound honor. Our duty is not just to maintain order, but to inspire our fellow students to achieve greatness. Under our motto 'உழை உயர்' (Rise through Effort), we strive to lead by example, fostering discipline, academic dedication, and a strong sense of community. I am immensely proud of the achievements of my fellow prefects this year and the legacy of service we pass on to the next generation.",
+          "achievements": [
+            "Led the organization of the 2026 Annual Inter-House Sports Meet, introducing digitized scorekeeping.",
+            "Initiated the 'Prefect Mentorship Program' pairing senior students with grade 6 juniors for peer academic support.",
+            "Represented the college at the National Student Leadership Forum in Colombo, winning the Best Delegation award."
+          ]
+        },
+        {
+          "year": "2025",
+          "name": "Master M. Karthik",
+          "title": "Head Prefect",
+          "image": "/principal.jpg",
+          "message": "It was a privilege to lead the board during our 90th anniversary year. We focused on community outreach and strengthening school discipline through positive reinforcement, building a legacy of service.",
+          "achievements": [
+            "Organized the first provincial school leadership symposium with 15 participating schools.",
+            "Initiated the campus plastic-free green pledge in collaboration with the Environmental Club."
+          ]
+        }
+      ],
       gallery_years: [
         { "year": "2026", "images": ["/school-building.jpg", "/sports.jpg"] },
         { "year": "2025", "images": ["/gallery-1.jpg", "/cultural-event.jpg"] }
@@ -201,7 +226,8 @@ const ClubDetails = () => {
             activities: Array.isArray(data.activities) ? data.activities : JSON.parse(data.activities || '[]'),
             head_achievements: Array.isArray(data.head_achievements) ? data.head_achievements : JSON.parse(data.head_achievements || '[]'),
             gallery_years: Array.isArray(data.gallery_years) ? data.gallery_years : JSON.parse(data.gallery_years || '[]'),
-            member_lists: Array.isArray(data.member_lists) ? data.member_lists : JSON.parse(data.member_lists || '[]')
+            member_lists: Array.isArray(data.member_lists) ? data.member_lists : JSON.parse(data.member_lists || '[]'),
+            leadership_history: Array.isArray(data.leadership_history) ? data.leadership_history : JSON.parse(data.leadership_history || '[]')
           };
           setClub(formattedClub);
           initializeYears(formattedClub);
@@ -280,6 +306,16 @@ const ClubDetails = () => {
   const activeRoster = club.member_lists?.find(r => r.year === activeRosterYear)?.members || [];
   // Get active gallery images
   const activeGalleryImages = club.gallery_years?.find(g => g.year === activeGalleryYear)?.images || [];
+  
+  // Resolve active leader for the current year tab from leadership history
+  const activeLeader = club.leadership_history?.find(l => l.year === activeRosterYear) || null;
+  const resolvedLeader = activeLeader || (club.head_name ? {
+    name: club.head_name,
+    title: club.head_title || 'Leader',
+    image: club.head_image,
+    message: club.head_message,
+    achievements: club.head_achievements
+  } : null);
 
   return (
     <div className="pt-24 md:pt-28 font-sans bg-slate-50 min-h-screen">
@@ -417,45 +453,45 @@ const ClubDetails = () => {
           <div className="lg:col-span-5 space-y-8 md:space-y-12">
             
             {/* Leadership Message Card */}
-            {club.head_name ? (
+            {resolvedLeader ? (
               <div className="bg-white border border-slate-100 rounded-3xl p-6 md:p-8 shadow-sm text-left relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-24 h-24 bg-school-gold/10 rounded-bl-full flex items-center justify-center flex-shrink-0 -z-10" />
                 
                 <h3 className="text-lg font-bold text-school-gold uppercase tracking-widest mb-6 flex items-center gap-2">
-                  <User className="w-5 h-5" /> Leadership Message
+                  <User className="w-5 h-5" /> Leadership Message ({activeRosterYear})
                 </h3>
 
                 <div className="flex flex-col sm:flex-row items-center sm:items-start gap-5 mb-6">
                   {/* Leader Image */}
                   <div className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-2xl overflow-hidden border-2 border-school-gold flex-shrink-0 shadow-md">
                     <img 
-                      src={club.head_image || "/principal.jpg"} 
-                      alt={club.head_name} 
+                      src={resolvedLeader.image || "/principal.jpg"} 
+                      alt={resolvedLeader.name} 
                       className="w-full h-full object-cover"
                     />
                   </div>
                   <div className="space-y-1 text-center sm:text-left">
-                    <h4 className="text-xl font-bold text-school-navy">{club.head_name}</h4>
-                    <p className="text-xs font-bold text-school-gold uppercase tracking-wider">{club.head_title || 'Leader'}</p>
+                    <h4 className="text-xl font-bold text-school-navy">{resolvedLeader.name}</h4>
+                    <p className="text-xs font-bold text-school-gold uppercase tracking-wider">{resolvedLeader.title || 'Leader'}</p>
                     <p className="text-[11px] text-slate-500 font-medium">Saraswathy Central College</p>
                   </div>
                 </div>
 
                 {/* Message Speech bubble */}
-                {club.head_message && (
+                {resolvedLeader.message && (
                   <blockquote className="bg-slate-50 border-l-4 border-school-gold p-4 rounded-r-xl italic font-serif text-slate-700 text-sm md:text-base mb-6 leading-relaxed relative">
-                    "{club.head_message}"
+                    "{resolvedLeader.message}"
                   </blockquote>
                 )}
 
                 {/* Leader Achievements */}
-                {club.head_achievements && club.head_achievements.length > 0 && (
+                {resolvedLeader.achievements && resolvedLeader.achievements.length > 0 && (
                   <div className="space-y-3">
                     <h5 className="text-xs font-black uppercase text-school-navy tracking-wider border-b border-slate-100 pb-1.5">
                       Key Contributions & Achievements
                     </h5>
                     <ul className="space-y-2">
-                      {club.head_achievements.map((ach, idx) => (
+                      {resolvedLeader.achievements.map((ach, idx) => (
                         <li key={idx} className="flex items-start gap-2 text-xs md:text-sm text-slate-600">
                           <ChevronRight className="w-4 h-4 text-school-gold flex-shrink-0 mt-0.5" />
                           <span>{ach}</span>
