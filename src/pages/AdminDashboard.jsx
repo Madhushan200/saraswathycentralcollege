@@ -250,7 +250,7 @@ const AdminDashboard = () => {
     head_achievements: '',
     gallery_years: '',
     member_lists: '',
-    leadership_history: '',
+    leadership_history: [],
     logoFile: null,
     bannerFile: null,
     headImageFile: null
@@ -480,6 +480,31 @@ const AdminDashboard = () => {
     }
   };
 
+  const handleLeaderChange = (index, field, value) => {
+    setClubForm(prev => {
+      const updatedHistory = [...(prev.leadership_history || [])];
+      updatedHistory[index] = { ...updatedHistory[index], [field]: value };
+      return { ...prev, leadership_history: updatedHistory };
+    });
+  };
+
+  const addLeaderRow = () => {
+    setClubForm(prev => ({
+      ...prev,
+      leadership_history: [
+        ...(prev.leadership_history || []),
+        { year: new Date().getFullYear().toString(), name: '', title: 'President', image: '', message: '', achievements: [], file: null }
+      ]
+    }));
+  };
+
+  const removeLeaderRow = (index) => {
+    setClubForm(prev => {
+      const updatedHistory = (prev.leadership_history || []).filter((_, idx) => idx !== index);
+      return { ...prev, leadership_history: updatedHistory };
+    });
+  };
+
   // ----------------------------------------------------
   // CRUD Handlers
   // ----------------------------------------------------
@@ -506,7 +531,7 @@ const AdminDashboard = () => {
         head_achievements: '',
         gallery_years: '',
         member_lists: '',
-        leadership_history: '',
+        leadership_history: [],
         logoFile: null,
         bannerFile: null,
         headImageFile: null
@@ -572,7 +597,7 @@ const AdminDashboard = () => {
         head_achievements: hAchs,
         gallery_years: galYearsStr,
         member_lists: mListsStr,
-        leadership_history: stringifyLeadershipHistory(item.leadership_history),
+        leadership_history: Array.isArray(item.leadership_history) ? item.leadership_history : [],
         logoFile: null,
         bannerFile: null,
         headImageFile: null
@@ -727,7 +752,27 @@ const AdminDashboard = () => {
           });
         }
 
-        const leadershipHistoryArr = parseLeadershipHistory(clubForm.leadership_history);
+        // Upload images for leadership history items
+        const leadershipHistoryArr = await Promise.all(
+          (clubForm.leadership_history || []).map(async (leader) => {
+            let imgUrl = leader.image;
+            if (leader.file) {
+              imgUrl = await uploadImage(leader.file);
+            }
+            return {
+              year: leader.year || '',
+              name: leader.name || '',
+              title: leader.title || '',
+              image: imgUrl || '',
+              message: leader.message || '',
+              achievements: Array.isArray(leader.achievements)
+                ? leader.achievements
+                : typeof leader.achievements === 'string'
+                  ? leader.achievements.split('\n').map(a => a.trim()).filter(a => a.length > 0)
+                  : []
+            };
+          })
+        );
         const latestLeader = leadershipHistoryArr.find(l => l.year === '2026') || leadershipHistoryArr[0] || null;
 
         const payload = {
@@ -1777,20 +1822,122 @@ const AdminDashboard = () => {
                   </div>
 
                   {/* SECTION 3: LEADERSHIP HISTORY */}
-                  <div className="border-b border-white/10 pb-4 mb-4">
-                    <h3 className="text-sm font-extrabold text-school-gold uppercase tracking-wider mb-3">3. Year-Wise Leadership History</h3>
-                    <div className="space-y-1.5">
-                      <label className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center justify-between">
-                        <span>Leadership History (Separate terms with blank lines)</span>
-                        <span className="text-[10px] text-slate-500 font-medium normal-case">Format: Year followed by details</span>
-                      </label>
-                      <textarea 
-                        value={clubForm.leadership_history}
-                        placeholder="e.g.&#10;2026:&#10;Name: Master K. Ramanujan&#10;Title: Head Prefect&#10;Image: /principal.jpg&#10;Message: Serving as the Head Prefect is an honor...&#10;Achievements: Led organization of sports meet; Initiated mentorship program&#10;&#10;2025:&#10;Name: Master M. Karthik&#10;Title: Head Prefect&#10;Image: /principal.jpg&#10;Message: It was a privilege to serve..."
-                        onChange={(e) => setClubForm(prev => ({ ...prev, leadership_history: e.target.value }))}
-                        rows="8"
-                        className="w-full bg-white/5 border border-white/10 focus:border-school-gold rounded-xl py-3 px-4 text-white text-sm outline-none font-mono transition-all"
-                      />
+                  <div className="border-b border-white/10 pb-6 mb-4">
+                    <div className="flex items-center justify-between mb-4">
+                      <div>
+                        <h3 className="text-sm font-extrabold text-school-gold uppercase tracking-wider">3. Year-Wise Leadership History</h3>
+                        <p className="text-[10px] text-slate-500 font-medium">Add president / head prefect listings horizontally</p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={addLeaderRow}
+                        className="flex items-center gap-1 px-3 py-1.5 bg-school-gold hover:bg-school-gold/90 text-school-navy font-bold rounded-lg text-xs transition-colors cursor-pointer"
+                      >
+                        <Plus className="w-3.5 h-3.5" /> Add Leader
+                      </button>
+                    </div>
+
+                    <div className="space-y-4 max-h-[350px] overflow-y-auto pr-2 custom-scrollbar">
+                      {(!clubForm.leadership_history || clubForm.leadership_history.length === 0) ? (
+                        <div className="text-center py-6 border border-dashed border-white/10 rounded-2xl bg-white/5">
+                          <p className="text-xs text-slate-500 font-medium">No historical leaders added yet. Click 'Add Leader' to start.</p>
+                        </div>
+                      ) : (
+                        clubForm.leadership_history.map((leader, index) => (
+                          <div key={index} className="bg-white/5 border border-white/10 p-4 rounded-2xl space-y-3 relative group">
+                            {/* Horizontal grid matching image upload, year, name, title, delete */}
+                            <div className="flex flex-wrap md:flex-nowrap items-center gap-3">
+                              {/* Image Box */}
+                              <div className="flex-shrink-0">
+                                <label className="relative w-12 h-12 bg-black border border-dashed border-white/20 hover:border-school-gold rounded-xl flex flex-col items-center justify-center cursor-pointer overflow-hidden transition-all group/img">
+                                  {leader.file || leader.image ? (
+                                    <img 
+                                      src={leader.file ? URL.createObjectURL(leader.file) : leader.image} 
+                                      alt="Leader" 
+                                      className="w-full h-full object-cover" 
+                                    />
+                                  ) : (
+                                    <Upload className="w-4 h-4 text-slate-500 group-hover/img:text-school-gold transition-colors" />
+                                  )}
+                                  <input 
+                                    type="file" 
+                                    accept="image/*"
+                                    onChange={(e) => handleLeaderChange(index, 'file', e.target.files[0])}
+                                    className="hidden"
+                                  />
+                                </label>
+                              </div>
+
+                              {/* Year Field */}
+                              <div className="w-20 flex-shrink-0">
+                                <input 
+                                  type="text" 
+                                  placeholder="Year" 
+                                  required
+                                  value={leader.year} 
+                                  onChange={(e) => handleLeaderChange(index, 'year', e.target.value)}
+                                  className="w-full bg-black/40 border border-white/10 focus:border-school-gold rounded-lg py-2 px-2 text-white text-xs font-bold text-center outline-none"
+                                />
+                              </div>
+
+                              {/* Name Field */}
+                              <div className="flex-grow min-w-[150px]">
+                                <input 
+                                  type="text" 
+                                  placeholder="Leader Name (e.g. Master K. Ramanujan)" 
+                                  required
+                                  value={leader.name} 
+                                  onChange={(e) => handleLeaderChange(index, 'name', e.target.value)}
+                                  className="w-full bg-black/40 border border-white/10 focus:border-school-gold rounded-lg py-2 px-3 text-white text-xs font-medium outline-none"
+                                />
+                              </div>
+
+                              {/* Title / Role Field */}
+                              <div className="w-[180px] flex-shrink-0">
+                                <input 
+                                  type="text" 
+                                  placeholder="Title (e.g. Head Prefect)" 
+                                  required
+                                  value={leader.title} 
+                                  onChange={(e) => handleLeaderChange(index, 'title', e.target.value)}
+                                  className="w-full bg-black/40 border border-white/10 focus:border-school-gold rounded-lg py-2 px-3 text-white text-xs font-bold outline-none"
+                                />
+                              </div>
+
+                              {/* Delete Button */}
+                              <button 
+                                type="button" 
+                                onClick={() => removeLeaderRow(index)}
+                                className="p-2 bg-red-950/20 hover:bg-red-900/40 text-red-400 hover:text-white rounded-lg transition-colors cursor-pointer flex-shrink-0"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </button>
+                            </div>
+
+                            {/* Additional Message and Achievements fields inside sub-grid */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-3 border-t border-white/5">
+                              <div>
+                                <textarea 
+                                  placeholder="Leader Message Quote (optional)..."
+                                  value={leader.message || ''}
+                                  onChange={(e) => handleLeaderChange(index, 'message', e.target.value)}
+                                  rows="2"
+                                  className="w-full bg-black/20 border border-white/10 focus:border-school-gold rounded-lg py-1.5 px-3 text-white text-xs outline-none"
+                                />
+                              </div>
+                              <div>
+                                <textarea 
+                                  placeholder="Achievements (one per line, optional)..."
+                                  value={Array.isArray(leader.achievements) ? leader.achievements.join('\n') : leader.achievements || ''}
+                                  onChange={(e) => handleLeaderChange(index, 'achievements', e.target.value)}
+                                  rows="2"
+                                  className="w-full bg-black/20 border border-white/10 focus:border-school-gold rounded-lg py-1.5 px-3 text-white text-xs outline-none"
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        ))
+                      )}
                     </div>
                   </div>
 
