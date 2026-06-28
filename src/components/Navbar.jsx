@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Phone, Mail } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -42,29 +42,6 @@ const Navbar = () => {
 
   return (
     <header className="fixed top-0 left-0 w-full z-40 transition-all duration-300 font-sans">
-      {/* Top Banner */}
-      <div className={`bg-school-navy-dark border-b border-school-gold/15 text-slate-300 py-2.5 px-6 hidden md:block transition-all duration-300 ${
-        isScrolled ? 'h-0 py-0 overflow-hidden border-b-0' : ''
-      }`}>
-        <div className="w-full flex justify-between items-center text-xs">
-          <div className="flex items-center gap-6">
-            <span className="flex items-center gap-1.5">
-              <Phone className="w-3.5 h-3.5 text-school-gold" />
-              +94 21 222 1234
-            </span>
-            <span className="flex items-center gap-1.5">
-              <Mail className="w-3.5 h-3.5 text-school-gold" />
-              info@saraswathycc.edu.lk
-            </span>
-          </div>
-          <div className="flex items-center gap-6">
-            <span className="text-school-gold font-bold text-sm tracking-wider font-semibold">
-              மகுடம்: உழை உயர் (உழைத்து உயர்வோம்)
-            </span>
-          </div>
-        </div>
-      </div>
-
       {/* Main Navbar */}
       <nav className={`transition-all duration-300 px-6 ${
         isScrolled 
