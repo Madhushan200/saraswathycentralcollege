@@ -72,7 +72,7 @@ const ContactUs = () => {
                   <h4 className="font-bold text-school-navy text-base mb-1">Campus Location</h4>
                   <p className="text-slate-500 text-sm leading-relaxed">
                     Saraswathy Central College,<br />
-                    Saraswathy Lane, Karaveddy,<br />
+                    Saraswathy Lane, Badulla,<br />
                     Northern Province, Sri Lanka.
                   </p>
                 </div>

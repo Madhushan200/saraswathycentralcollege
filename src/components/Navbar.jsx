@@ -182,7 +182,7 @@ const Navbar = () => {
           <div className="flex flex-col items-center gap-2 text-slate-400 text-xs">
             <span>info@saraswathycc.edu.lk</span>
             <span>+94 21 222 1234</span>
-            <span className="text-[10px] text-slate-500 mt-2">Karaveddy, Sri Lanka</span>
+            <span className="text-[10px] text-slate-500 mt-2">Badulla, Sri Lanka</span>
           </div>
         </div>
       </div>

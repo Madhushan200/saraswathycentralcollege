@@ -203,7 +203,7 @@ const AboutUs = () => {
             <div className="h-1.5 w-16 bg-school-gold rounded-full" />
             <div className="text-slate-600 text-sm md:text-base leading-relaxed space-y-4">
               <p>
-                Established in 1935 in the historical educational town of Karaveddy, Saraswathy Central College began as a humble community initiative to provide premium education to children in the region. Driven by local philanthropists and visionary educators, the school steadily grew in stature.
+                Established in 1935 in the historical educational town of Badulla, Saraswathy Central College began as a humble community initiative to provide premium education to children in the region. Driven by local philanthropists and visionary educators, the school steadily grew in stature.
               </p>
               <p>
                 In 1947, under the government's free education scheme pioneered by C.W.W. Kannangara, the college expanded its infrastructure and academic offerings, quickly earning a reputation for sending outstanding scholars to national universities.

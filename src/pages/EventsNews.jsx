@@ -89,7 +89,7 @@ const EventsNews = () => {
       category: "Community Service",
       title: "Environmental Awareness Program",
       description: "Marking World Environment Day, students launched a clean campus drive and planted native trees around the municipality grounds.",
-      fullContent: "In celebration of World Environment Day, the Environmental Club of Saraswathy Central College organized a series of community-centric activities. Students from grades 8 to 12 participated in a clean-up campaign targeting public spaces around the Karaveddy junction. Additionally, the college planted 50 native trees on school borders and hosted a seminar on waste management and single-use plastic reduction."
+      fullContent: "In celebration of World Environment Day, the Environmental Club of Saraswathy Central College organized a series of community-centric activities. Students from grades 8 to 12 participated in a clean-up campaign targeting public spaces around the Badulla junction. Additionally, the college planted 50 native trees on school borders and hosted a seminar on waste management and single-use plastic reduction."
     }
   ];
 
