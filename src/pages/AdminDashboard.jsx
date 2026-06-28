@@ -158,6 +158,14 @@ const SEED_ACHIEVEMENTS = [
   { id: 6, title: "Zonal School Badminton Singles Silver", level: "Zonal", category: "Sports", description: "Silver medal in junior singles category at the zonal schools tournament.", image: "/sports.jpg", year: "2026" }
 ];
 
+const SEED_TIMETABLES = [
+  { id: 1, title: 'Grade 10 Class Timetable - Term 1', type: 'Class', grade_stream: 'Grade 10', file_url: '/school-building.jpg', academic_year: '2026' },
+  { id: 2, title: 'G.C.E. Advanced Level Science Stream Schedule', type: 'Class', grade_stream: 'A/L Science', file_url: '/gallery-1.jpg', academic_year: '2026' },
+  { id: 3, title: 'Grade 8 General Subjects Time Table', type: 'Class', grade_stream: 'Grade 8', file_url: '/gallery-2.jpg', academic_year: '2026' },
+  { id: 4, title: 'First Term Examination Schedule - All Grades', type: 'Exam', grade_stream: 'All Grades', file_url: '/gallery-3.jpg', academic_year: '2026' },
+  { id: 5, title: 'G.C.E. Ordinary Level Mock Seminar Program', type: 'Exam', grade_stream: 'Grade 11', file_url: '/students.jpg', academic_year: '2026' }
+];
+
 // To stringify leadership_history:
 const stringifyLeadershipHistory = (historyList) => {
   if (!Array.isArray(historyList)) return '';
@@ -226,10 +234,11 @@ const AdminDashboard = () => {
   const [principals, setPrincipals] = useState([]);
   const [academics, setAcademics] = useState([]);
   const [achievements, setAchievements] = useState([]);
+  const [timetables, setTimetables] = useState([]);
 
   // Modal Control States
   const [showModal, setShowModal] = useState(false);
-  const [modalType, setModalType] = useState('event'); // 'event', 'gallery', 'club', 'page', 'principal', 'academic', 'achievement'
+  const [modalType, setModalType] = useState('event'); // 'event', 'gallery', 'club', 'page', 'principal', 'academic', 'achievement', 'timetable'
   const [editingItem, setEditingItem] = useState(null); // null for create, object for edit
 
   // Form Fields
@@ -259,6 +268,14 @@ const AdminDashboard = () => {
   const [principalForm, setPrincipalForm] = useState({ name: '', period: '', description: '', image: '', file: null });
   const [academicForm, setAcademicForm] = useState({ title: '', category: 'Primary', description: '', subjects: '', image: '', file: null });
   const [achievementForm, setAchievementForm] = useState({ title: '', level: 'National', category: 'Academic', description: '', year: '', image: '', file: null });
+  const [timetableForm, setTimetableForm] = useState({
+    title: '',
+    type: 'Class',
+    grade_stream: '',
+    academic_year: '2026',
+    file_url: '',
+    file: null
+  });
 
   // ----------------------------------------------------
   // Toast Notification
@@ -282,6 +299,7 @@ const AdminDashboard = () => {
       let localPrincipals = localStorage.getItem('saraswathy_principals');
       let localAcademics = localStorage.getItem('saraswathy_academics');
       let localAchievements = localStorage.getItem('saraswathy_achievements');
+      let localTimetables = localStorage.getItem('saraswathy_timetables');
 
       if (!localEvents) {
         localStorage.setItem('saraswathy_events', JSON.stringify(SEED_EVENTS));
@@ -311,6 +329,10 @@ const AdminDashboard = () => {
         localStorage.setItem('saraswathy_achievements', JSON.stringify(SEED_ACHIEVEMENTS));
         localAchievements = JSON.stringify(SEED_ACHIEVEMENTS);
       }
+      if (!localTimetables) {
+        localStorage.setItem('saraswathy_timetables', JSON.stringify(SEED_TIMETABLES));
+        localTimetables = JSON.stringify(SEED_TIMETABLES);
+      }
 
       setEvents(JSON.parse(localEvents));
       setGallery(JSON.parse(localGallery));
@@ -319,12 +341,13 @@ const AdminDashboard = () => {
       setPrincipals(JSON.parse(localPrincipals));
       setAcademics(JSON.parse(localAcademics));
       setAchievements(JSON.parse(localAchievements));
+      setTimetables(JSON.parse(localTimetables));
       setLoading(false);
       return;
     }
 
     try {
-      const [eventsRes, galleryRes, clubsRes, pagesRes, principalsRes, academicsRes, achievementsRes] = await Promise.all([
+      const [eventsRes, galleryRes, clubsRes, pagesRes, principalsRes, academicsRes, achievementsRes, timetablesRes] = await Promise.all([
         supabase.from('events').select('*').order('created_at', { ascending: false }),
         supabase.from('gallery').select('*').order('created_at', { ascending: false }),
         supabase.from('clubs').select('*').order('id', { ascending: true }),
@@ -332,6 +355,7 @@ const AdminDashboard = () => {
         supabase.from('principals').select('*').order('id', { ascending: true }),
         supabase.from('academics').select('*').order('id', { ascending: true }),
         supabase.from('achievements').select('*').order('id', { ascending: false }),
+        supabase.from('timetables').select('*').order('title', { ascending: true })
       ]);
 
       if (eventsRes.error) throw eventsRes.error;
@@ -341,6 +365,7 @@ const AdminDashboard = () => {
       if (principalsRes.error) throw principalsRes.error;
       if (academicsRes.error) throw academicsRes.error;
       if (achievementsRes.error) throw achievementsRes.error;
+      if (timetablesRes.error) throw timetablesRes.error;
 
       setEvents(eventsRes.data || []);
       setGallery(galleryRes.data || []);
@@ -349,6 +374,7 @@ const AdminDashboard = () => {
       setPrincipals(principalsRes.data || []);
       setAcademics(academicsRes.data || []);
       setAchievements(achievementsRes.data || []);
+      setTimetables(timetablesRes.data || []);
     } catch (err) {
       console.error('Error fetching dashboard data:', err);
       showToast(err.message, 'error');
@@ -544,6 +570,8 @@ const AdminDashboard = () => {
       setAcademicForm({ title: '', category: 'Primary', description: '', subjects: '', image: '', file: null });
     } else if (type === 'achievement') {
       setAchievementForm({ title: '', level: 'National', category: 'Academic', description: '', year: new Date().getFullYear().toString(), image: '', file: null });
+    } else if (type === 'timetable') {
+      setTimetableForm({ title: '', type: 'Class', grade_stream: '', academic_year: '2026', file_url: '', file: null });
     }
     setShowModal(true);
   };
@@ -610,6 +638,8 @@ const AdminDashboard = () => {
       setAcademicForm({ ...item, file: null });
     } else if (type === 'achievement') {
       setAchievementForm({ ...item, file: null });
+    } else if (type === 'timetable') {
+      setTimetableForm({ ...item, file: null });
     }
     setShowModal(true);
   };
@@ -984,6 +1014,44 @@ const AdminDashboard = () => {
             showToast('Achievement added successfully');
           }
         }
+      } else if (modalType === 'timetable') {
+        let fileUrl = timetableForm.file_url;
+        if (timetableForm.file) {
+          fileUrl = await uploadImage(timetableForm.file);
+        }
+
+        const payload = {
+          id: editingItem ? editingItem.id : Date.now(),
+          title: timetableForm.title,
+          type: timetableForm.type,
+          grade_stream: timetableForm.grade_stream,
+          academic_year: timetableForm.academic_year,
+          file_url: fileUrl || '/school-building.jpg'
+        };
+
+        if (isMockEnabled) {
+          let currentList = [...timetables];
+          if (editingItem) {
+            currentList = currentList.map(item => item.id === editingItem.id ? payload : item);
+            showToast('Timetable updated in LocalStorage');
+          } else {
+            currentList.push(payload);
+            showToast('Timetable added to LocalStorage');
+          }
+          localStorage.setItem('saraswathy_timetables', JSON.stringify(currentList));
+        } else {
+          const payloadDb = { ...payload };
+          delete payloadDb.id;
+          if (editingItem) {
+            const { error } = await supabase.from('timetables').update(payloadDb).eq('id', editingItem.id);
+            if (error) throw error;
+            showToast('Timetable updated successfully');
+          } else {
+            const { error } = await supabase.from('timetables').insert([payloadDb]);
+            if (error) throw error;
+            showToast('Timetable added successfully');
+          }
+        }
       }
 
       setShowModal(false);
@@ -1024,6 +1092,9 @@ const AdminDashboard = () => {
         } else if (type === 'achievement') {
           const filtered = achievements.filter(a => a.id !== id);
           localStorage.setItem('saraswathy_achievements', JSON.stringify(filtered));
+        } else if (type === 'timetable') {
+          const filtered = timetables.filter(t => t.id !== id);
+          localStorage.setItem('saraswathy_timetables', JSON.stringify(filtered));
         }
         showToast(`${type.charAt(0).toUpperCase() + type.slice(1)} deleted from LocalStorage`);
       } else {
@@ -1034,6 +1105,7 @@ const AdminDashboard = () => {
         if (type === 'principal') table = 'principals';
         if (type === 'academic') table = 'academics';
         if (type === 'achievement') table = 'achievements';
+        if (type === 'timetable') table = 'timetables';
 
         const { error } = await supabase.from(table).delete().eq('id', id);
         if (error) throw error;
@@ -1209,16 +1281,24 @@ const AdminDashboard = () => {
           >
             Achievements
           </button>
+          <button 
+            onClick={() => setActiveTab('timetables')}
+            className={`px-5 py-2.5 rounded-xl text-xs font-bold tracking-wide transition-all cursor-pointer ${
+              activeTab === 'timetables' ? 'bg-school-gold text-school-navy shadow-lg font-black' : 'hover:bg-white/5 text-slate-400'
+            }`}
+          >
+            Timetables
+          </button>
         </div>
 
         {/* Action Button & Loader */}
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-xl font-black capitalize tracking-tight">{activeTab} List</h2>
           <button
-            onClick={() => openCreateModal(activeTab === 'gallery' ? 'gallery' : activeTab.slice(0, -1))}
+            onClick={() => openCreateModal(activeTab === 'gallery' ? 'gallery' : activeTab === 'timetables' ? 'timetable' : activeTab.slice(0, -1))}
             className="flex items-center gap-1.5 bg-school-navy hover:bg-school-navy-light text-white hover:text-school-gold border border-school-gold/20 px-5 py-3 rounded-xl text-sm font-bold shadow-lg transition-all cursor-pointer"
           >
-            <Plus className="w-4 h-4" /> Add New {activeTab === 'gallery' ? 'Gallery Item' : activeTab.slice(0, -1)}
+            <Plus className="w-4 h-4" /> Add New {activeTab === 'gallery' ? 'Gallery Item' : activeTab === 'timetables' ? 'Timetable' : activeTab.slice(0, -1)}
           </button>
         </div>
 
@@ -1514,6 +1594,57 @@ const AdminDashboard = () => {
                     {achievements.length === 0 && (
                       <tr>
                         <td colSpan="6" className="p-8 text-center text-slate-400">No achievements recorded yet. Click "Add New Achievement" to log one.</td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            )}
+
+            {activeTab === 'timetables' && (
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-sm border-collapse">
+                  <thead>
+                    <tr className="bg-white/5 border-b border-white/10 text-slate-300 font-bold uppercase tracking-wider text-xs">
+                      <th className="p-4">Title</th>
+                      <th className="p-4">Type</th>
+                      <th className="p-4">Grade / Stream</th>
+                      <th className="p-4">Year</th>
+                      <th className="p-4">Resource URL</th>
+                      <th className="p-4 text-center">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-white/5">
+                    {timetables.map((tt) => (
+                      <tr key={tt.id} className="hover:bg-white/5 transition-colors">
+                        <td className="p-4 font-bold text-white max-w-[200px] truncate">{tt.title}</td>
+                        <td className="p-4">
+                          <span className={`text-xs px-2.5 py-1 rounded-full font-bold ${
+                            tt.type === 'Class' 
+                              ? 'bg-blue-500/15 text-blue-400' 
+                              : 'bg-amber-500/15 text-amber-400'
+                          }`}>
+                            {tt.type}
+                          </span>
+                        </td>
+                        <td className="p-4 text-slate-300 text-xs font-semibold">{tt.grade_stream}</td>
+                        <td className="p-4 text-slate-400 text-xs">{tt.academic_year || '2026'}</td>
+                        <td className="p-4 text-slate-400 text-xs max-w-[150px] truncate">
+                          <a href={tt.file_url} target="_blank" rel="noopener noreferrer" className="text-school-gold hover:underline flex items-center gap-1 font-bold">
+                            Link <ExternalLink className="w-3.5 h-3.5" />
+                          </a>
+                        </td>
+                        <td className="p-4 text-center">
+                          <div className="flex justify-center items-center gap-2">
+                            <button onClick={() => openEditModal('timetable', tt)} className="p-2 hover:bg-white/10 text-indigo-400 hover:text-white rounded-lg transition-colors cursor-pointer"><Edit className="w-4 h-4" /></button>
+                            <button onClick={() => handleDelete('timetable', tt.id)} className="p-2 hover:bg-white/10 text-rose-400 hover:text-white rounded-lg transition-colors cursor-pointer"><Trash2 className="w-4 h-4" /></button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                    {timetables.length === 0 && (
+                      <tr>
+                        <td colSpan="6" className="p-8 text-center text-slate-400">No schedules recorded yet. Click \"Add New Timetable\" to upload one.</td>
                       </tr>
                     )}
                   </tbody>
@@ -2281,6 +2412,86 @@ const AdminDashboard = () => {
                       rows="4"
                       className="w-full bg-white/5 border border-white/10 focus:border-school-gold rounded-xl py-3 px-4 text-white text-sm outline-none transition-all"
                     />
+                  </div>
+                </>
+              )}
+
+              {/* Timetable Editor Fields */}
+              {modalType === 'timetable' && (
+                <>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="space-y-1.5 col-span-2">
+                      <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Timetable Title</label>
+                      <input 
+                        type="text" 
+                        required
+                        value={timetableForm.title}
+                        onChange={(e) => setTimetableForm(prev => ({ ...prev, title: e.target.value }))}
+                        className="w-full bg-white/5 border border-white/10 focus:border-school-gold rounded-xl py-3 px-4 text-white text-sm outline-none transition-all"
+                      />
+                    </div>
+                    <div className="space-y-1.5">
+                      <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Academic Year</label>
+                      <input 
+                        type="text" 
+                        required
+                        value={timetableForm.academic_year}
+                        onChange={(e) => setTimetableForm(prev => ({ ...prev, academic_year: e.target.value }))}
+                        className="w-full bg-white/5 border border-white/10 focus:border-school-gold rounded-xl py-3 px-4 text-white text-sm outline-none transition-all font-mono"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-1.5">
+                      <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Schedule Type</label>
+                      <select 
+                        value={timetableForm.type}
+                        onChange={(e) => setTimetableForm(prev => ({ ...prev, type: e.target.value }))}
+                        className="w-full bg-slate-900 border border-white/10 focus:border-school-gold rounded-xl py-3 px-4 text-white text-sm outline-none transition-all"
+                      >
+                        <option value="Class">Class Timetable</option>
+                        <option value="Exam">Examination Schedule</option>
+                      </select>
+                    </div>
+                    <div className="space-y-1.5">
+                      <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Grade / Stream / Level</label>
+                      <input 
+                        type="text" 
+                        required
+                        placeholder="e.g. Grade 10, A/L Commerce, All Grades"
+                        value={timetableForm.grade_stream}
+                        onChange={(e) => setTimetableForm(prev => ({ ...prev, grade_stream: e.target.value }))}
+                        className="w-full bg-white/5 border border-white/10 focus:border-school-gold rounded-xl py-3 px-4 text-white text-sm outline-none transition-all"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-1.5">
+                      <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Upload Schedule PDF / Image</label>
+                      <label className="flex items-center gap-2 px-4 py-3 bg-white/5 border border-white/10 hover:border-school-gold text-slate-300 rounded-xl cursor-pointer text-xs font-bold w-full transition-all">
+                        <Upload className="w-4 h-4 text-school-gold" />
+                        <span className="truncate">{timetableForm.file ? timetableForm.file.name : 'Select file...'}</span>
+                        <input 
+                          type="file" 
+                          accept="application/pdf,image/*"
+                          onChange={(e) => setTimetableForm(prev => ({ ...prev, file: e.target.files[0] }))}
+                          className="hidden"
+                        />
+                      </label>
+                    </div>
+
+                    <div className="space-y-1.5">
+                      <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Or Resource URL Link</label>
+                      <input 
+                        type="text" 
+                        value={timetableForm.file_url}
+                        placeholder="/school-building.jpg"
+                        onChange={(e) => setTimetableForm(prev => ({ ...prev, file_url: e.target.value }))}
+                        className="w-full bg-white/5 border border-white/10 focus:border-school-gold rounded-xl py-3 px-4 text-white text-sm outline-none transition-all"
+                      />
+                    </div>
                   </div>
                 </>
               )}
