@@ -388,7 +388,7 @@ const Home = () => {
               <li className="flex items-start gap-3">
                 <MapPin className="w-5 h-5 text-school-gold mt-1 flex-shrink-0" />
                 <span className="text-slate-700">
-                  Saraswathy Central College, Saraswathy Lane, Badulla, Sri Lanka.
+                  Saraswathy Central College, Mahiyanganaya Road, Badulla, Uva Province, Sri Lanka.
                 </span>
               </li>
               <li className="flex items-center gap-3">

@@ -17,7 +17,7 @@ const Achievements = () => {
           if (!localAchievements) {
             const seedAchievements = [
               { id: 1, title: "National School Athletic Championship Gold Medal", level: "National", category: "Sports", description: "Gold medal in 400m and high jump events won at the national athletic arena.", image: "/sports.jpg", year: "2025" },
-              { id: 2, title: "Northern Province Under-19 Cricket Champions", level: "Province", category: "Sports", description: "Our Under-19 cricket team won the championship trophy of the Northern Province schools league.", image: "/sports.jpg", year: "2025" },
+              { id: 2, title: "Uva Province Under-19 Cricket Champions", level: "Province", category: "Sports", description: "Our Under-19 cricket team won the championship trophy of the Uva Province schools league.", image: "/sports.jpg", year: "2025" },
               { id: 3, title: "Zonal School Science Exhibition Winner", level: "Zonal", category: "Academic", description: "First prize for the robotic solar irrigation prototype model designed by the science society.", image: "/gallery-1.jpg", year: "2026" },
               { id: 4, title: "National Chemistry Olympiad Finalist", level: "National", category: "Academic", description: "Honorable mention and finalist award at the National Chemistry Olympiad finals held in Colombo.", image: "/students.jpg", year: "2025" },
               { id: 5, title: "Provincial Tamil Literary Oratorical Award", level: "Province", category: "Cultural", description: "First place in the senior Tamil oratorical category during the Provincial Tamil Literary Festival.", image: "/cultural-event.jpg", year: "2025" },

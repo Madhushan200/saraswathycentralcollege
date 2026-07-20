@@ -77,7 +77,7 @@ const Footer = () => {
             </div>
           </div>
           <p className="text-slate-400 text-sm leading-relaxed">
-            A premier educational institution in Badulla, Sri Lanka, nurturing leaders and scholars since 1935. Committed to academic rigor, discipline, and cultural heritage.
+            A premier educational institution in Badulla, Sri Lanka, nurturing leaders and scholars since 1934. Committed to academic rigor, discipline, and cultural heritage.
           </p>
           <div className="flex gap-4">
             <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-lg bg-white/5 hover:bg-school-gold hover:text-school-navy flex items-center justify-center text-slate-300 transition-colors border border-white/10">
@@ -147,8 +147,8 @@ const Footer = () => {
               <MapPin className="w-5 h-5 text-school-gold mt-0.5 flex-shrink-0" />
               <span className="text-slate-400">
                 Saraswathy Central College,<br />
-                Saraswathy Lane, Badulla,<br />
-                Northern Province, Sri Lanka.
+                Mahiyanganaya Road, Badulla,<br />
+                Uva Province, Sri Lanka.
               </span>
             </li>
             <li className="flex items-center gap-3">

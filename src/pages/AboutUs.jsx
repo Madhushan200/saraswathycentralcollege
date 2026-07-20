@@ -14,7 +14,7 @@ const AboutUs = () => {
           let localPrincipals = localStorage.getItem('saraswathy_principals');
           if (!localPrincipals) {
             const seedPrincipals = [
-              { id: 1, name: "Mr. K. Somasundaram", period: "1935 - 1948", image: "/principal.jpg", description: "Founding Principal of Saraswathy Central College who laid the pillars of academic integrity and discipline." },
+              { id: 1, name: "Mr. K. Somasundaram", period: "1934 - 1948", image: "/principal.jpg", description: "Founding Principal of Saraswathy Central College who laid the pillars of academic integrity and discipline." },
               { id: 2, name: "Mr. T. Vyramuttu", period: "1948 - 1965", image: "/principal.jpg", description: "Championed the free education scheme and built the main administrative block and library facility." },
               { id: 3, name: "Mr. V. Tharmalingam", period: "1965 - 1982", image: "/principal.jpg", description: "Fostered athletic programs and established the annual Inter-House Sports Meet structure." }
             ];
@@ -70,7 +70,7 @@ const AboutUs = () => {
         <img src="/school-building.jpg" alt="About College Banner" className="absolute inset-0 w-full h-full object-cover" />
         <div className="max-w-7xl mx-auto px-6 relative z-20 text-center space-y-4">
           <span className="text-school-gold font-bold text-sm uppercase tracking-widest font-semibold block">
-            Nurturing Generations Since 1935
+            Nurturing Generations Since 1934
           </span>
           <h1 className="text-4xl md:text-6xl font-black text-white tracking-tight">
             About Saraswathy Central College
@@ -203,7 +203,7 @@ const AboutUs = () => {
             <div className="h-1.5 w-16 bg-school-gold rounded-full" />
             <div className="text-slate-600 text-sm md:text-base leading-relaxed space-y-4">
               <p>
-                Established in 1935 in the historical educational town of Badulla, Saraswathy Central College began as a humble community initiative to provide premium education to children in the region. Driven by local philanthropists and visionary educators, the school steadily grew in stature.
+                Established in 1934 in the historical educational town of Badulla, Saraswathy Central College began as a humble community initiative to provide premium education to children in the region. Driven by local philanthropists and visionary educators, the school steadily grew in stature.
               </p>
               <p>
                 In 1947, under the government's free education scheme pioneered by C.W.W. Kannangara, the college expanded its infrastructure and academic offerings, quickly earning a reputation for sending outstanding scholars to national universities.

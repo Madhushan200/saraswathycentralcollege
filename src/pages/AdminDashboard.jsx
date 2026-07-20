@@ -134,7 +134,7 @@ const SEED_PAGES = [
 ];
 
 const SEED_PRINCIPALS = [
-  { id: 1, name: "Mr. K. Somasundaram", period: "1935 - 1948", image: "/principal.jpg", description: "Founding Principal of Saraswathy Central College who laid the pillars of academic integrity and discipline." },
+  { id: 1, name: "Mr. K. Somasundaram", period: "1934 - 1948", image: "/principal.jpg", description: "Founding Principal of Saraswathy Central College who laid the pillars of academic integrity and discipline." },
   { id: 2, name: "Mr. T. Vyramuttu", period: "1948 - 1965", image: "/principal.jpg", description: "Championed the free education scheme and built the main administrative block and library facility." },
   { id: 3, name: "Mr. V. Tharmalingam", period: "1965 - 1982", image: "/principal.jpg", description: "Fostered athletic programs and established the annual Inter-House Sports Meet structure." }
 ];
@@ -151,7 +151,7 @@ const SEED_ACADEMICS = [
 
 const SEED_ACHIEVEMENTS = [
   { id: 1, title: "National School Athletic Championship Gold Medal", level: "National", category: "Sports", description: "Gold medal in 400m and high jump events won at the national athletic arena.", image: "/sports.jpg", year: "2025" },
-  { id: 2, title: "Northern Province Under-19 Cricket Champions", level: "Province", category: "Sports", description: "Our Under-19 cricket team won the championship trophy of the Northern Province schools league.", image: "/sports.jpg", year: "2025" },
+  { id: 2, title: "Uva Province Under-19 Cricket Champions", level: "Province", category: "Sports", description: "Our Under-19 cricket team won the championship trophy of the Uva Province schools league.", image: "/sports.jpg", year: "2025" },
   { id: 3, title: "Zonal School Science Exhibition Winner", level: "Zonal", category: "Academic", description: "First prize for the robotic solar irrigation prototype model designed by the science society.", image: "/gallery-1.jpg", year: "2026" },
   { id: 4, title: "National Chemistry Olympiad Finalist", level: "National", category: "Academic", description: "Honorable mention and finalist award at the National Chemistry Olympiad finals held in Colombo.", image: "/students.jpg", year: "2025" },
   { id: 5, title: "Provincial Tamil Literary Oratorical Award", level: "Province", category: "Cultural", description: "First place in the senior Tamil oratorical category during the Provincial Tamil Literary Festival.", image: "/cultural-event.jpg", year: "2025" },
@@ -2189,7 +2189,7 @@ const AdminDashboard = () => {
                       />
                     </div>
                     <div className="space-y-1.5">
-                      <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Active Period (e.g. 1935 - 1948)</label>
+                      <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Active Period (e.g. 1934 - 1948)</label>
                       <input 
                         type="text" 
                         required
