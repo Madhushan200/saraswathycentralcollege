@@ -98,25 +98,25 @@ const AboutUs = () => {
               <div className="absolute inset-0 bg-school-gold rounded-3xl rotate-3" />
               <img 
                 src="/principal.jpg" 
-                alt="Principal Mr. S. Sivanesan" 
+                alt="Principal Mr. A. Kanagaderan S.L.P.S - 1" 
                 className="absolute inset-0 w-full h-full object-cover rounded-3xl shadow-xl border border-slate-100 transform hover:rotate-0 transition-transform duration-300"
               />
             </div>
             
             <div className="w-full bg-white border border-slate-200 p-6 rounded-2xl space-y-4 text-sm shadow-sm">
               <div className="text-center pb-2 border-b border-slate-150">
-                <h3 className="text-lg font-bold text-school-navy">Mr. S. Sivanesan</h3>
-                <p className="text-xs text-slate-500 uppercase tracking-widest mt-0.5 font-semibold">Principal</p>
+                <h3 className="text-lg font-bold text-school-navy">Mr. A. Kanagaderan</h3>
+                <p className="text-xs text-slate-500 uppercase tracking-widest mt-0.5 font-semibold">Principal (S.L.P.S - 1)</p>
               </div>
               
               <div className="space-y-2 text-slate-600 text-left">
                 <p className="flex items-center gap-2">
                   <Mail className="w-4 h-4 text-school-gold flex-shrink-0" />
-                  <span className="truncate">principal@saraswathycc.edu.lk</span>
+                  <span className="truncate">kanagaderan12515@gmail.com</span>
                 </p>
                 <p className="flex items-center gap-2">
                   <Phone className="w-4 h-4 text-school-gold flex-shrink-0" />
-                  <span>+94 21 222 1234 ext: 101</span>
+                  <span>0786997766</span>
                 </p>
                 <p className="flex items-center gap-2">
                   <Calendar className="w-4 h-4 text-school-gold flex-shrink-0" />
@@ -160,10 +160,10 @@ const AboutUs = () => {
                 <p className="text-slate-500 text-sm">Yours sincerely,</p>
                 <div className="h-12 flex items-center mt-2">
                   <span className="font-serif italic text-2xl text-school-navy border-b border-slate-300 pb-1">
-                    S. Sivanesan
+                    A. Kanagaderan
                   </span>
                 </div>
-                <p className="text-school-navy font-bold mt-2 text-sm">Mr. S. Sivanesan</p>
+                <p className="text-school-navy font-bold mt-2 text-sm">Mr. A. Kanagaderan (S.L.P.S - 1)</p>
                 <p className="text-slate-500 text-xs uppercase tracking-wider">Principal, Saraswathy Central College</p>
               </div>
               
@@ -173,7 +173,7 @@ const AboutUs = () => {
                 </div>
                 <div>
                   <p className="text-xs font-bold text-school-navy text-left">National Education Council</p>
-                  <p className="text-[10px] text-slate-500 font-medium text-left">Certified Grade-I Principal</p>
+                  <p className="text-[10px] text-slate-500 font-medium text-left">S.L.P.S - 1 Certified Principal</p>
                 </div>
               </div>
             </div>

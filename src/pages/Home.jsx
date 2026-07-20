@@ -166,7 +166,7 @@ const Home = () => {
               "It is with great pride that I welcome you to Saraswathy Central College. Our school stands as a place where education, discipline, culture, and character come together to shape the future of our students. Guided by our meaningful motto “உழை உயர்”, we believe that sincere effort and hard work are the foundation of success."
             </blockquote>
             <div>
-              <p className="text-school-navy font-bold text-base">Mr. S. Sivanesan</p>
+              <p className="text-school-navy font-bold text-base">Mr. A. Kanagaderan (S.L.P.S - 1)</p>
               <p className="text-slate-500 text-xs uppercase tracking-wider">Principal, Saraswathy Central College</p>
             </div>
             <div className="pt-2">

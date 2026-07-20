@@ -86,6 +86,7 @@ const ContactUs = () => {
                 <div>
                   <h4 className="font-bold text-school-navy text-base mb-1">Telephone Contacts</h4>
                   <p className="text-slate-500 text-sm leading-relaxed">
+                    Principal Direct: 0786997766<br />
                     Main Office: +94 21 222 1234<br />
                     Administration: +94 21 222 5678
                   </p>
@@ -100,8 +101,8 @@ const ContactUs = () => {
                 <div>
                   <h4 className="font-bold text-school-navy text-base mb-1">Email Addresses</h4>
                   <p className="text-slate-500 text-sm leading-relaxed">
-                    Inquiries: info@saraswathycc.edu.lk<br />
-                    Principal Office: principal@saraswathycc.edu.lk
+                    Principal Direct: kanagaderan12515@gmail.com<br />
+                    General Inquiries: info@saraswathycc.edu.lk
                   </p>
                 </div>
               </div>

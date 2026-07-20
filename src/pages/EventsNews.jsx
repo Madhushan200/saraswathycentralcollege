@@ -80,7 +80,7 @@ const EventsNews = () => {
       category: "Leadership",
       title: "Prefects’ Investiture Ceremony",
       description: "Official badge pinning and pledge taking by the newly elected student leaders, pledging to safeguard discipline and code of conduct.",
-      fullContent: "The Prefect Investiture Ceremony for the school year 2026 was held under the patronage of the Principal, Mr. S. Sivanesan. Eighty students from grades 11 and 13 were badged as Senior and Junior Prefects. The newly appointed Head Prefect took the oath of office, leading the board in promising to maintain school rules, coordinate student programs, and serve as role models of discipline and dedication."
+      fullContent: "The Prefect Investiture Ceremony for the school year 2026 was held under the patronage of the Principal, Mr. A. Kanagaderan (S.L.P.S - 1). Eighty students from grades 11 and 13 were badged as Senior and Junior Prefects. The newly appointed Head Prefect took the oath of office, leading the board in promising to maintain school rules, coordinate student programs, and serve as role models of discipline and dedication."
     },
     {
       id: 6,
